@@ -41,28 +41,118 @@ int is_valid_map(t_map *map, char *str)
     return (1);
 }
 
+int close_window(t_vars *var)
+{
+    // TODO: FREE_ALL
+    print_message("Quit\n", YELLOWN);
+    return (exit (0));
+}
+
 int set_key_press(int keycode)
 {
     if (keycode == KEY_ESC)
         //close game
+    else if (keycode == KEY_W)
+        // TODO: Função para andar
+    else if (keycode == KEY_A)
+        // TODO: Função para andar
+    else if (keycode == KEY_S)
+        // TODO: Função para andar
+    else if (keycode == KEY_D)
+        // TODO: Função para andar
+    else if (keycode == KEY_RIGHT)
+        // TODO: Função para andar
+    else if (keycode == KEY_LEFT)
+        // TODO: Função para andar
+    else if (keycode == KEY_E)
+        // TODO: Função para abrir a porta
+    else if (keycode == KEY_C)
+        // TODO: Função para lidar com o mouse
     return (0);
 }
 
-int initialise_vars(t_vars *var)
+int initialize_vars(t_vars *var)
 {
     var->frame = -1;
-    // MALLOC RAY CASTING
+    // TODO: MALLOC RAY CASTING
     return (0);
+}
+
+int game_loop(t_vars *var)
+{
+    if (++var->frame >= 60)
+        var->frame = 0;
+    set_key_press(var);
+    handle_keypress(var);
+    return (0)
+}
+
+int inilialize_mlx(t_vars *var)
+{
+    var->mlx = mlx_init();
+    // TODO: Colocar na estrutura as images
+    var->win = mlx_new_window(var->mlx, WIDTH, HEIGHT, "cub3d");
+    // TODO: Inicialização do minimap
+    // TODO: Condição se a inicialização das texturas funcionou
+    return (1);
+}
+
+void    vertical_player_move(int keycode, t_vars *var, float speed)
+{
+    t_player    *g;
+    char        **map;
+
+    // g = &var->g;
+    map = var->map->map;
+    if (keycode == KEY_SHIFT)   
+        speed *= (float)2;
+    else if (keycode == KEY_W)
+    {
+        if (map[g->pos_y][(g->pos_x + g->dir_x * speed)] == DOOR_OPEN
+			|| map[g->pos_y][(g->pos_x + g->dir_x * speed)] == FLOOR)
+			(float)g->pos_x += (float)g->dir_x * speed;
+        if (map[g->pos_y + g->dir_y * speed][(g->pos_x)] == DOOR_OPEN
+            || map[g->pos_y + g->dir_y * speed][(g->pos_x)] == FLOOR)
+            (float)g->pos_y += (float)g->dir_y * speed;
+    }
+    else if (keycode == KEY_S)
+    {
+        if (map[g->pos_y][(g->pos_x - g->dir_x * speed)] == DOOR_OPEN
+			|| map[g->pos_y][(g->pos_x - g->dir_x * speed)] == FLOOR)
+			(float)g->pos_x -= (float)g->dir_x * speed;
+        if (map[g->pos_y - g->dir_y * speed][(g->pos_x)] == DOOR_OPEN
+            || map[g->pos_y - g->dir_y * speed][(g->pos_x)] == FLOOR)
+            (float)g->pos_y -= (float)g->dir_y * speed;
+    } 
+}
+
+void    handle_keypress(int keycode, t_vars *var)
+{
+    if (keycode == KEY_W || keycode == KEY_S)
+        vertical_player_move(keycode, var, 0.05);
+    else if (keycode == KEY_A || keycode == KEY_D)
+        // TODO: Função para mover
+    else if (keycode == ARROW_LEFT)
+        // TODO: Função para mover
+    else if (keycode == ARROW_RIGHT)
+        // TODO: Função para mover
 }
 
 int init_game(t_vars *var)
 {
-    mlx_hook(var->win, 2, (1L << 0), KEY_PRESS, var);
-    mlx_hook(var->win, 3, (1L << 1), KEY_RELEASE, var);
-    mlx_hook(var->win, 17, (1L << 17), CLOSE_WIN, var);
-    mlx_hook(var->win, 6, (1L << 6), MOUSE_HOOK, var);
+    if (initialize_vars(var))
+    {
+        // TODO: FREE_ALL
+        print_error_exit("Unable to allocate variables", REDN, 1);
+    }
+    if (!inilialize_mlx(var))
+        return (0)
+    mlx_hook(var->win, 2, (1L _<< 0), set_key_press, var);
+    // mlx_hook(var->win, 3, (1L << 1), KEY_RELEASE, var);
+    mlx_hook(var->win, 17, (1L << 17), close_window, var);
+    // mlx_hook(var->win, 6, (1L << 6), MOUSE_HOOK, var);
     mlx_loop_hook(var->mlx, game_loop, var);
     mlx_loop(var->mlx);
-    //FREE ALL
-    return (0);
+    // TODO: FREE ALL
+    return (1);
 }
