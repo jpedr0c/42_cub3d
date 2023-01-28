@@ -12,25 +12,22 @@
 
 #include "../include/cub3d.h"
 
-int check_args(int argc, char **argv)
-{
-    if (argc != 2)
-    {
-        printError("Invalid number of arguments. Usage: ./cub3d map.cub", REDN, 0);
-        return (0);
-    }
-    else if(ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 4) != 0)
-    {
-        printError("Invalid file extension. Accepted extension is .cub", REDN, 0);
-        return (0);
-    }
-    return (1);
-}
-
 int main (int argc, char **argv)
 {
-    if (!check_args(argc, argv))
-        return (0);
-    printf("JOGO RODANDO\n");
+    t_vars *var;
+
+    if (!is_valid_args(argc, argv))
+        return (1);
+    var = (t_vars *)malloc(sizeof(t_vars));
+    var->map = (t_map *)malloc(sizeof(t_map));
+    init_map(map);
+    if (!read_map(var->map, argv[1]))
+        return (1);
+    if (!is_valid_map(var->map, argv[1]))
+        return (1);
+    print_message("Starting game...", YELLOWN);
+    if (init_game(var))
+        return (1);
+    print_message("Quit game", YELLOWN);
     return (0);
 }
