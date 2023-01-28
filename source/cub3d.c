@@ -26,7 +26,7 @@ int main (int argc, char **argv)
     if (!is_valid_map(var->map, argv[1]))
         return (1);
     print_message("Starting game...", YELLOWN);
-    if (init_game(var))
+    if (!init_game(var))
         return (1);
     print_message("Quit game", YELLOWN);
     return (0);
