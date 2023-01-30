@@ -25,9 +25,57 @@ void    free_split(char **splited)
     free(splited);
 }
 
-void    free_vars(t_vars *var)
+void    free_map(t_map *map)
+{
+    int i;
+
+    i = -1;
+    free_split(map->map);
+    free_split(map->buffer);
+    if (map->sprites)
+    {
+        while (map->sprites[++i])
+            free_split(map->sprites[i]);
+        free(map->sprites);
+    }
+    i = -1;
+    while (++i <= map->sprite_cnt)
+        free(map->spaux[i].type);
+    free(map->sprite);
+    free(map->spaux);
+    free(map->no);
+    free(map->so);
+    free(map->we);
+    free(map->ea);
+    free(map->door);
+    free(map);
+}
+
+void    free_struct(t_vars *var)
 {
     free(var->sprite);
     free(var->ray);
     free(var);
+}
+
+void    free_all(t_vars *var)
+{
+    int i;
+    int j;
+
+    mlx_destroy_image(var->mlx, var->img.img);
+    mlx_destroy_image(var->mlx, var->tex[].img.img);
+    i = -1;
+    while (var->sprite != NULL && var->sprite[++i] != NULL)
+    {
+        j = -1;
+        while (var->sprite[i][++i] != NULL)
+        {
+            mlx_destroy_image(var->mlx, var->sprite[i][j]->img.img);
+            free(var->sprite[i][j]);
+        }
+        free(var->sprite[i]);
+    }
+    mlx_destroy_window(var->mlx, var->win);
+    free_struct(var);
 }
