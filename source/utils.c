@@ -12,6 +12,13 @@
 
 #include "../include/cub3d.h"
 
+void    print_message(char *str, char *color)
+{
+    char *reset_color;
+    reset_color = DEFAULT;
+    printf("%s%s%s\n", color, str, reset_color);
+}
+
 int is_valid_args(int argc, char **argv)
 {
     if (argc != 2)
@@ -32,11 +39,4 @@ int is_valid_map(t_map *map, char *str)
     if (map->lines == 0)
         return (print_error("This map is empty", 0));
     return (1);
-}
-
-void    print_message(char *str, char *color)
-{
-    char *reset_color;
-    reset_color = DEFAULT;
-    printf("%s%s%s\n", color, str, reset_color);
 }
