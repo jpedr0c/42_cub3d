@@ -27,23 +27,11 @@ int is_valid_args(int argc, char **argv)
     return (1);
 }
 
-void    print_error_exit(char *str, char *color, int exit_code)
+int is_valid_map(t_map *map, char *str)
 {
-    char *reset_color;
-    reset_color = DEFAULT;
-    printf("%sError\n", color);
-    printf("%s%s\n", str, reset_color);
-    if (exit_code == 1)
-        exit(1);
-}
-
-int    print_error(char *str, char *color, int value_return)
-{
-    char *reset_color;
-    reset_color = DEFAULT;
-    printf("%sError\n", color);
-    printf("%s%s\n", str, reset_color);
-    return (value_return);
+    if (map->lines == 0)
+        return (print_error("This map is empty", 0));
+    return (1);
 }
 
 void    print_message(char *str, char *color)
