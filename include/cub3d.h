@@ -21,6 +21,16 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <string.h>
+# include <unistd.h>
+# include <math.h>
+
+# define BUFFER_SIZE 42
+# define WIDTH 1280
+# define WIDTH 720
+# define TEX 64
+# define FLOOR '0'
+# define WALL '1'
 
 # ifdef OSX
 #  define KEY_ESC 53
@@ -59,6 +69,63 @@
 #  define KEY_SHIFT 65505
 # endif
 
+
+typedef struct s_sprite
+{
+    int     x;
+    int     y;
+    int     id;
+}   t_sprite;
+
+typedef struct s_spaux
+{
+    char    *type;
+    int     *id;
+}   t_spaux;
+
+typedef struct s_map
+{
+    t_sprite    *sprite;
+    t_spaux     *spaux;
+    char        start_orientation;
+    char        **map;
+    char        **buffer;
+    char        ***sprites;
+    char        *no;
+    char        *so;
+    char        *we;
+    char        *ea;
+    char        *door;
+    int         width;
+    int         height;
+    int         frgb;
+    int         crgb;
+    int         aux;
+    int         lines;
+    int         count;
+    int         sprite_cnt;
+    int         sprite_index;
+    int         pos_cnt;
+    int         pos_index;
+    float       p_pos[2];
+} t_map;
+
+typedef struct s_img
+{
+    void    *img;
+    char    *addr;
+    int     bpp;
+    int     line_len;
+    int     endian;
+} t_img;
+
+typedef struct s_tex
+{
+    t_img   img;
+    int     h;
+    int     w;
+}
+
 typedef struct s_player
 {
     float     pos_x;
@@ -69,62 +136,120 @@ typedef struct s_player
     float     plane_y;
 } t_player;
 
-typedef struct s_map
+typedef struct s_ray
 {
-    char    **buffer;
-    char    *no;
-    char    *so;
-    char    *we;
-    char    *ea;
-    char    *door;
-    int     width;
-    int     height;
-    int     crgb;
-    int     frgb;
-    int     lines;
-    int     count;
-    int     sprite_cnt;
-    int     sprite_index;
-    int     pos_cnt;
-    int     pos_index;
-    float   p_pos[2];
-} t_map;
-
-// typedef struct s_keys
-// {
-//     t_bool  w;
-//     t_bool  a;
-//     t_bool  s;
-//     t_bool  d;
-//     t_bool  c;
-//     t_bool  right_arrow;
-//     t_bool  left_arrow;
-//     t_bool  shift;
-//     int     mouse_x;
-//     int     prev_mouse_x;
-// } t_keys;
+    int     map_x;
+    int     map_y;
+    float   cam_x;
+    float   cam_y;
+    float   dir_x;
+    float   dir_y;
+    float   side_dist_x;
+    float   side_dist_y;
+    float   delta_dist_x;
+    float   delta_dist_y;
+    float   perp_wall_dist;
+    int     step_x;
+    int     step_y;
+    int     hit;
+    int     hit_door;
+    int     side;
+    int     line_height;
+    int     draw_start;
+    int     draw_end;
+    int     texture_id;
+    int     tex_x;
+    int     tex_y;
+    float   wall_x;
+    float   step;
+    float   tex_pos;
+    float   z_buffer[WIDTH];
+    int     *sprite_order;
+    float   *sprite_dist;
+} t_ray;
 
 typedef struct s_vars
 {
     int         frame;
+    t_map       *map;
     t_player    g;
+    t_img       img;
+    t_tex       tex[5];
+    t_tex       ***sprite;
+    t_sprite    **sprites;
     void        *win;
     void        *mlx;
+    int         door_hit[2];
+    t_ray       *ray;
 } t_vars;
 
-//CUB3D
+typedef struct s_sprite_utl
+{
+    float	x;
+	float	y;
+	float	inv_det;
+	float	transform_x;
+	float	transform_y;
+	int		screen_x;
+	int		height;
+	int		draw_start_y;
+	int		draw_end_y;
+	int		width;
+	int		draw_start_x;
+	int		draw_end_x;
+	int		tex_x;
+	int		d;
+	int		tex_y;
+	int		color;
+	int		id;
+	int		frame;
+}   t_sprite_utl
 
-//UTILS
-int     is_valid_args(int argc, char **argv);
+
+//CUB3D
+int main (int argc, char **argv);
+
+// CONTROLS
+void    vertical_player_move(int keycode, t_vars *var, float speed);
+void    horizontal_player_move(int keycode, t_vars *var, float speed);
+void    change_vision_player(int keycode, t_vars *var, float speed);
+void    handle_keypress(int keycode, t_vars *var);
+
+
+// DRAW
+void    init_ray(t_vars *var, t_ray *ray, int x);
+void    draw(t_vars *var);
+
+
+// ERROR
+int    print_error(char *str, char *color, int value_return);
 void    print_error_exit(char *str, char *color, int exit_code);
-int     print_error(char *str, char *color, int value_return);
+
+
+// FREEDOM_SINGS
+void    free_split(char **splited);
+void    free_map(t_map *map);
+void    free_struct(t_vars *var);
+void    free_all(t_vars *var);
+
+
+// GENERATE_MAP
+int read_map(t_map *map, char *str);
+
+
+// INIT
+int     close_window(t_vars *var);
+int     game_loop(t_vars *var);
+void    init_map(t_map *map);
+int     initialize_vars(t_vars *var);
+int     inilialize_mlx(t_vars *var);
+int     init_game(t_vars *var);
+
+
+// UTILS
+int     is_valid_args(int argc, char **argv);
+int     is_valid_map(t_map *map, char *str);
 void    print_message(char *str, char *color);
 
-//GENERATE_MAP
-int     read_map(t_map *map, char *str);
-
-//INIT
-void    init_map(t_map *map);
-int     is_valid_map(t_map *map, char *str);
 
 #endif
