@@ -61,10 +61,12 @@
 
 typedef struct s_player
 {
-    int   pos_x;
-    int   pos_y;
-    int   dir_x;
-    int   dir_y;
+    float     pos_x;
+    float     pos_y;
+    float     dir_x;
+    float     dir_y;
+    float     plane_x;
+    float     plane_y;
 } t_player;
 
 typedef struct s_map
