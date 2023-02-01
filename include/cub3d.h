@@ -230,6 +230,12 @@ int     handle_keypress(int keycode, t_vars *var);
 
 // DRAW
 void    init_ray(t_vars *var, t_ray *ray, int x);
+void	init_step_and_sidedist(t_vars *var, t_ray *ray);
+void    check_colision_wall(t_vars *var, t_ray *ray);
+void    dda(t_vars *var, t_ray *ray);
+void    calculate_screen_line(t_ray *ray);
+void    draw_vertical_line(t_vars *var, t_ray *ray, int w);
+void	raycast_wall(t_vars *var);
 void    draw(t_vars *var);
 
 
@@ -256,6 +262,11 @@ void    init_map(t_map *map);
 int     initialize_vars(t_vars *var);
 int     inilialize_mlx(t_vars *var);
 int     init_game(t_vars *var);
+
+
+// TEXTURE
+void	set_texture_id(t_ray *ray);
+void    calculate_texture_data(t_vars *var, t_ray *ray);
 
 
 // UTILS
