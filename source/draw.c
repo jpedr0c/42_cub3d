@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 14:19:53 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/01 17:48:30 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/01 18:17:32 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,24 +82,6 @@ void    dda(t_vars *var, t_ray *ray)
     }
 }
 
-void	set_texture_id(t_ray *ray)
-{
-	if (ray->side == 0)
-	{
-		if (ray->dir_x < 0)
-			ray->texture_id = TEX_WE;
-		else
-			ray->texture_id = TEX_EA;
-	}
-	else
-	{
-		if (ray->dir_y < 0)
-			ray->texture_id = TEX_NO;
-		else
-			ray->texture_id = TEX_SO;
-	}
-}
-
 void   calculate_screen_line(t_ray *ray)
 {
     if (ray->side == 0)
@@ -113,22 +95,6 @@ void   calculate_screen_line(t_ray *ray)
     ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
     if (ray->draw_end >= HEIGHT)
         ray->draw_end = HEIGHT - 1;
-}
-
-void    calculate_texture_data(t_vars *var, t_ray *ray)
-{
-    if (ray->side == 0)
-        ray->wall_x = var->g.pos_y + ray->perp_wall_dist * ray->dir_y;
-    else
-        ray->wall_x = var->g.pos_x + ray->perp_wall_dist * ray->dir_x;
-    ray->wall_x -= floor((ray->wall_x));
-    ray->tex_x = (int)(ray->wall_x * (float)TEX_W);
-    if (ray->side == 0 && ray->dir_x > 0)
-        ray->tex_x = var->tex[ray->texture_id].w - ray->tex_x - 1;
-    if (ray->side == 1 && ray->dir_y < 0)
-        ray->tex_x = var->tex[ray->texture_id].w - ray->tex_x - 1;
-    ray->step = 1.0 * var->tex[ray->texture_id].h / ray->line_height;
-    ray->tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2) * ray->step;
 }
 
 void    draw_vertical_line(t_vars *var, t_ray *ray, int w)
@@ -151,7 +117,7 @@ void    draw_vertical_line(t_vars *var, t_ray *ray, int w)
 			// TODO: Função img_paste_pixel
 		}
 		if (h > ray->draw_end)
-			//TODO: Função img_pixel_put
+			;//TODO: Função img_pixel_put
 	}
 }
 
