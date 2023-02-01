@@ -25,50 +25,61 @@
 # include <unistd.h>
 # include <math.h>
 
-# define BUFFER_SIZE 42
 # define WIDTH 1280
-# define WIDTH 720
+# define HEIGHT 720
 # define TEX 64
 # define FLOOR '0'
 # define WALL '1'
-
-# ifdef OSX
-#  define KEY_ESC 53
-#  define KEY_MINUS 27
-#  define KEY_PLUS 24
-#  define ARROW_UP 126
-#  define ARROW_DOWN 125
-#  define ARROW_LEFT 123
-#  define ARROW_RIGHT 124
-#  define KEY_W 13
-#  define KEY_S 1
-#  define KEY_A 0
-#  define KEY_D 2
-#  define KEY_P 35
-#  define KEY_E 14
-#  define KEY_C 8
-#  define KEY_SHIFT 257
-# else
-#  ifndef LINUX
-#   define LINUX
-#  endif
-#  define KEY_ESC 65307
-#  define KEY_MINUS 45
-#  define KEY_PLUS 61
-#  define ARROW_UP 65362
-#  define ARROW_DOWN 65364
-#  define ARROW_LEFT 65361
-#  define ARROW_RIGHT 65363
-#  define KEY_W 119
-#  define KEY_S 115
-#  define KEY_A 97
-#  define KEY_D 100
-#  define KEY_P 112
-#  define KEY_E 101
-#  define KEY_C 99
-#  define KEY_SHIFT 65505
+# if !defined TEX_W || !defined TEX_H
+#  define TEX_W 64
+#  define TEX_H 64
 # endif
+# if !defined NO || !defined SO || !defined WE || !defined EA
+#  define TEX_NO 0
+#  define TEX_SO 1
+#  define TEX_WE 2
+#  define TEX_EA 3
+#endif
 
+# ifdef __linux__
+enum e_keycode
+{
+    KEY_ESC = 65307,
+    KEY_MINUS = 45,
+    KEY_PLUS = 61,
+    ARROW_UP = 65362,
+    ARROW_DOWN = 65364,
+    ARROW_LEFT = 65361,
+    ARROW_RIGHT = 65363,
+    KEY_W = 119,
+    KEY_S = 115,
+    KEY_A = 97,
+    KEY_D = 100,
+    KEY_P = 112,
+    KEY_E = 101,
+    KEY_C = 99,
+    KEY_SHIFT = 65505
+};
+# else
+enum e_keycode
+{
+    KEY_ESC = 53,
+    KEY_MINUS = 27,
+    KEY_PLUS = 24,
+    ARROW_UP = 126,
+    ARROW_DOWN = 125,
+    ARROW_LEFT = 123,
+    ARROW_RIGHT = 124,
+    KEY_W = 13,
+    KEY_S = 1,
+    KEY_A = 0,
+    KEY_D = 2,
+    KEY_P = 35,
+    KEY_E = 14,
+    KEY_C = 8,
+    KEY_SHIFT = 257
+};
+# endif
 
 typedef struct s_sprite
 {
@@ -124,7 +135,7 @@ typedef struct s_tex
     t_img   img;
     int     h;
     int     w;
-}
+} t_tex;
 
 typedef struct s_player
 {
@@ -183,7 +194,7 @@ typedef struct s_vars
     t_ray       *ray;
 } t_vars;
 
-typedef struct s_sprite_utl
+typedef struct s_sprite_util
 {
     float	x;
 	float	y;
@@ -203,17 +214,18 @@ typedef struct s_sprite_utl
 	int		color;
 	int		id;
 	int		frame;
-}   t_sprite_utl
+}   t_sprite_util;
 
 
 //CUB3D
-int main (int argc, char **argv);
+int     main (int argc, char **argv);
+
 
 // CONTROLS
 void    vertical_player_move(int keycode, t_vars *var, float speed);
 void    horizontal_player_move(int keycode, t_vars *var, float speed);
 void    change_vision_player(int keycode, t_vars *var, float speed);
-void    handle_keypress(int keycode, t_vars *var);
+int     handle_keypress(int keycode, t_vars *var);
 
 
 // DRAW
@@ -222,7 +234,7 @@ void    draw(t_vars *var);
 
 
 // ERROR
-int    print_error(char *str, char *color, int value_return);
+int     print_error(char *str, char *color, int value_return);
 void    print_error_exit(char *str, char *color, int exit_code);
 
 
@@ -234,7 +246,7 @@ void    free_all(t_vars *var);
 
 
 // GENERATE_MAP
-int read_map(t_map *map, char *str);
+int     read_map(t_map *map, char *str);
 
 
 // INIT
