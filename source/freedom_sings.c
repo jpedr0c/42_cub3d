@@ -54,11 +54,21 @@ void	free_map(t_map *map)
 	free(map);
 }
 
-void	free_struct(t_vars *var)
+void	free_struct_var(t_vars *var)
 {
 	free(var->sprite);
 	free(var->ray);
 	free(var);
+}
+
+int	free_struct_map(t_map *map, int back)
+{
+	free_split(map->buffer);
+	free(map->we);
+	free(map->so);
+	free(map->no);
+	free(map->ea);
+	exit(back);
 }
 
 void	free_all(t_vars *var)
