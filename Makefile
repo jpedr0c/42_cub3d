@@ -12,7 +12,7 @@
 
 SHELL		= /bin/bash
 
-NAME		= cub3d
+NAME		= cub3D
 INC			= inc
 HEADER		= -I inc
 LIBFT		= libraries/libft/
