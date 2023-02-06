@@ -14,8 +14,36 @@
 
 int	create_rgba(int r, int g, int b, int a)
 {
+	return (r << 24 | g << 16 | b << 8 | a);
+}
+
+// Funçao que irá processar as cores do mapa
+
+int process_colors(t_map **map, int i, char **ptr)
+{
+    int tmp[3];
+
+    if (array_length(ptr) != 3)
+        return (0);
+    if (is_array_digit(ptr) == 1)
+        return (0);
+    tmp[0] = ft_atoi(ptr[0]);
+    tmp[1] = ft_atoi(ptr[1]);
+    tmp[2] = ft_atoi(ptr[2]);
     if (r < 0 || r > 256 || g < 0 || g > 256 || b < 0 || b > 256
         || a < 0 || a > 256)
         return (0);
-	return (r << 24 | g << 16 | b << 8 | a);
+    if (ft_strncmp((*map)->buffer[i], "F", 1) == 0)
+    {
+        if ((*map)->frgb != 0)
+            return (print_error("Duplicate Colors\n", REDN, 0));
+        (*map)->frgb = create_rgba(tmp[0], tmp[1], tmp[2], 0);
+    }
+    else
+    {
+        if ((*map)->crgb != 0)
+            return (print_error("Duplicate Colors\n", REDN, 0));
+        (*map)->crgb = create_rgba(tmp[0], tmp[1], tmp[2], 0);
+    }
+    return (1);
 }
