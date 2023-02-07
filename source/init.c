@@ -38,7 +38,6 @@ void	init_map(t_map *map)
 	map->so = NULL;
 	map->we = NULL;
 	map->ea = NULL;
-	map->door = NULL;
 	map->height = 0;
 	map->width = 0;
 	map->crgb = 0;
@@ -56,8 +55,11 @@ void	init_map(t_map *map)
 int	initialize_vars(t_vars *var)
 {
 	var->frame = -1;
-	// TODO: MALLOC RAY CASTING
-	return (0);
+	start_dir_player(var);
+	var->ray = (t_ray *)malloc(sizeof(t_ray));
+	if (!var->ray)
+		print_error("Could not allocate\n", REDN, 0); 
+	return (1);
 }
 
 int	inilialize_mlx(t_vars *var)
