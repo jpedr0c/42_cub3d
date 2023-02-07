@@ -106,7 +106,6 @@ typedef struct s_map
     char        *so;
     char        *we;
     char        *ea;
-    char        *door;
     int         width;
     int         height;
     int         frgb;
@@ -226,7 +225,6 @@ int     main (int argc, char **argv);
 int	create_rgba(int r, int g, int b, int a);
 int process_colors(t_map **map, int i, char **ptr);
 int read_color(t_map **map, int i);
-int parse_texture(t_map *map);
 
 
 // CONTROLS
@@ -264,6 +262,7 @@ void    free_all(t_vars *var);
 int     read_map(t_map *map, char *str);
 void	fill_map(t_map **map);
 int     fill_buffer(char *file, int lines, t_map *map);
+int     init_parser(t_map *map, char *str);
 
 
 // INIT
@@ -291,6 +290,7 @@ void	set_texture_id(t_ray *ray);
 void    calculate_texture_data(t_vars *var, t_ray *ray);
 int     get_texture_WE_EA(t_map **map, int i);
 int     get_texture_NO_SO(t_map **map, int i);
+int     parse_texture(t_map *map);
 
 
 // UTILS

@@ -66,22 +66,3 @@ int read_color(t_map **map, int i)
         free_split(splited);
     return (1);
 }
-
-int parse_texture(t_map *map)
-{
-    int i;
-
-    i = -1;
-    while (map->buffer[++i] && is_filled_map(map))
-    {
-        if ((ft_strncmp(map->buffer[*i], "\n", 1) == 0
-			|| ft_strncmp(map->buffer[*i], "\0", 1) == 0))
-		    break;
-    }
-    if (!map->no || !map->so || !map->we || !map->ea || !map->s || !map->frgb || !map->crgb)
-        return (print_error("Missing texture\n", REDN, 0));
-    if (open_texture(map) == 0)
-        return (print_error("Invalid texture\n", REDN, 0));
-    map->aux = i;
-    return (i);
-}
