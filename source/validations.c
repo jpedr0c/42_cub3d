@@ -116,14 +116,13 @@ int	is_valid_direction(t_map *map)
 	while (++i < map->lines)
 	{
 		j = -1;
-		while (++j < map->columns)
+		while (++j < map->height)
 		{
-			if (map->map[i][j] == 'N' || map->map[i][j] == 'S'
-				|| map->map[i][j] == 'E' || map->map[i][j] == 'W')
-				(*map)->count++;
+			if (map->map[i][j] == 'N' || map->map[i][j] == 'S' || map->map[i][j] == 'E' || map->map[i][j] == 'W')
+				map->count++;
 		}
 	}
-	if ((*map)->count > 1)
+	if (map->count > 1)
 		return (print_error("Invalid map. There is more than one direction",
 				REDN, 0));
 	return (1);

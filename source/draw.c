@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 14:19:53 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/07 14:45:37 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/07 18:40:04 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,27 +140,27 @@ void   calculate_screen_line(t_ray *ray)
         ray->draw_end = HEIGHT - 1;
 }
 
-void    draw_vertical_line(t_vars *var, t_ray *ray, int w)
+void    draw_vertical_line(t_vars *var, t_ray *ray, int x)
 {
-    int		h;
+    int		y;
     int		color;
     t_tex	*tex;
 
 	tex = &var->tex[ray->texture_id];
-	h = -1;
-	while (++h < HEIGHT)
+	y = -1;
+	while (++y < HEIGHT)
 	{
 		if (y < ray->draw_start)
-			// TODO: Função img_pixel_put
-		if (h >= ray->draw_start && h <= ray->draw_end)
+			img_pixel_put(&var->img, WIDTH - 1 - x, y, var->map->crgb);
+		if (y >= ray->draw_start && y <= ray->draw_end)
 		{
 			ray->tex_y = (int)ray->tex_pos & (tex->h - 1);
 			ray->tex_pos += ray->step;
-			// TODO: Fazer função para colocar cor no pixel
-			// TODO: Função img_paste_pixel
+			color = get_pixel_color(&tex->img, ray->tex_x, ray->tex_y);
+			img_paste_pixel(&var->img, WIDTH - 1 - x, y, color);
 		}
-		if (h > ray->draw_end)
-			;//TODO: Função img_pixel_put
+		if (y > ray->draw_end)
+			img_pixel_put(&var->img, WIDTH - 1 - x, y, var->map->frgb);
 	}
 }
 
@@ -184,13 +184,32 @@ void	raycast_wall(t_vars *var)
 	}
 }
 
+void	draw_square(t_vars *var)
+{
+	int	side_len;
+	int	coords[2];
+	float	x;
+	float	y;
+
+	side_len = 10;
+	coords[0] = HEIGHT / 2 - side_len / 2;
+	coords[1] = WIDTH / 2 - side_len / 2;
+
+	y = -1;
+	while (++y < side_len)
+	{
+		x = -1;
+		while (++x < side_len)
+			img_pixel_put(&var->img, coords[1] + x, coords[0] + y, 0xFFFFFF);
+	}
+}
+
 void	draw(t_vars *var)
 {
 	var->door_hit[0] = -1;
 	var->door_hit[1] = -1;
 	ft_bzero(var->img.addr, HEIGHT * WIDTH * (var->img.bpp / 8));
-	// TODO: Função de Raycast das paredes
-	// TODO: Função de colocar um quadrado no centro da tela
+	raycast_wall(var);
+	draw_square(var);
 	mlx_put_image_to_window(var->mlx, var->win, var->img.img, 0, 0);
-	// TODO: Função para mostrar na tela os controles
 }

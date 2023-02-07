@@ -25,9 +25,12 @@ int	close_window(t_vars *var)
 
 int	game_loop(t_vars *var)
 {
+	int keycode;
+
+	keycode = 0;
 	if (++var->frame >= 60)
 		var->frame = 0;
-	// handle_keypress(keycode, var);
+	handle_keypress(keycode, var);
 	return (0);
 }
 
@@ -65,10 +68,11 @@ int	initialize_vars(t_vars *var)
 int	inilialize_mlx(t_vars *var)
 {
 	var->mlx = mlx_init();
-	// TODO: Colocar na estrutura as images
-	var->win = mlx_new_window(var->mlx, WIDTH, HEIGHT, "cub3d");
-	// TODO: Inicialização do minimap
-	// TODO: Condição se a inicialização das texturas funcionou
+	var->img.img = mlx_new_image(var->mlx, WIDTH, HEIGHT);
+	var->img.addr = mlx_get_data_addr(var->img.img, &var->img.bpp, &var->img.line_len, &var->img.endian);
+	var->win = mlx_new_window(var->mlx, WIDTH, HEIGHT, "cub3D");
+	if (init_texture(var))
+		return (0);
 	return (1);
 }
 

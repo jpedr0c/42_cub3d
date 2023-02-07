@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 18:05:54 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/07 14:26:36 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/07 18:58:12 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ int	open_texture(t_map *map)
 	fd[1] = open(map->so, O_RDONLY);
 	fd[2] = open(map->we, O_RDONLY);
 	fd[3] = open(map->ea, O_RDONLY);
-	fd[4] = open(map->s, O_RDONLY);
-	if (fd[0] == -1 || fd[1] == -1 || fd[2] == -1 || fd[3] == -1 || fd[4] == -1)
+	if (fd[0] == -1 || fd[1] == -1 || fd[2] == -1 || fd[3] == -1)
 		return (0);
 	close(fd[0]);
 	close(fd[1]);
@@ -131,8 +130,7 @@ int get_texture_NO_SO(t_map **map, int i)
 	}
 	else if (get_texture_WE_EA(map, i))
 		return (1);
-	else
-		return (0);
+	return (0);
 }
 
 int parse_texture(t_map *map)
@@ -142,11 +140,11 @@ int parse_texture(t_map *map)
     i = -1;
     while (map->buffer[++i] && is_filled_map(map))
     {
-        if ((ft_strncmp(map->buffer[*i], "\n", 1) == 0
-			|| ft_strncmp(map->buffer[*i], "\0", 1) == 0))
+        if ((ft_strncmp(map->buffer[i], "\n", 1) == 0
+			|| ft_strncmp(map->buffer[i], "\0", 1) == 0))
 		    break;
     }
-    if (!map->no || !map->so || !map->we || !map->ea || !map->s || !map->frgb || !map->crgb)
+    if (!map->no || !map->so || !map->we || !map->ea || !map->frgb || !map->crgb)
         return (print_error("Missing texture\n", REDN, 0));
     if (open_texture(map) == 0)
         return (print_error("Invalid texture\n", REDN, 0));

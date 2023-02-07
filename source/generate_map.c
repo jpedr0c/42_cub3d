@@ -50,10 +50,10 @@ void	fill_map(t_map **map)
 		if (!*(*map)->buffer[(*map)->index])
 			break ;
 		(*map)->map[i++] = ft_substr((*map)->buffer[(*map)->index],
-			0, ft_strlen((*map)->buffer[(*map->index)]));
+			0, ft_strlen((*map)->buffer[(*map)->index]));
 		(*map)->index++;
 	}
-	(*map)->map[i] == NULL;
+	(*map)->map[i] = NULL;
 }
 
 int	fill_buffer(char *file, int lines, t_map *map)
@@ -84,8 +84,8 @@ int	init_parser(t_map *map, char *str)
 {
 	if (map->lines == 0)
 		return (print_error("Empty map\n", REDN, 0));
-	if (map->lines == 0)
-		return (print_error("Empty map\n", REDN, 0));
+	if (!fill_buffer(str, map->lines, map))
+		return (print_error("Fatal error\n", REDN, 0));
 	if (parse_texture(map) < 0)
 		return (0);
 	if (parse_map(&map) != 0)

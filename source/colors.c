@@ -28,8 +28,7 @@ int process_colors(t_map **map, int i, char **ptr)
     tmp[0] = ft_atoi(ptr[0]);
     tmp[1] = ft_atoi(ptr[1]);
     tmp[2] = ft_atoi(ptr[2]);
-    if (r < 0 || r > 256 || g < 0 || g > 256 || b < 0 || b > 256
-        || a < 0 || a > 256)
+    if (tmp[0] < 0 || tmp[0] > 256 || tmp[1] < 0 || tmp[1] > 256 || tmp[2] < 0 || tmp[2] > 256)
         return (0);
     if (ft_strncmp((*map)->buffer[i], "F", 1) == 0)
     {
@@ -54,7 +53,7 @@ int read_color(t_map **map, int i)
     if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
         || ft_strncmp((*map)->buffer[i], "C", 1) == 0)
     {
-        aux = ft_substr(*map)->buffer[i], 2, ft_strlen(*map)->buffer[i]) - 1);
+        aux = ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1);
         splited = ft_split(aux, ',');
         free(aux);
         if (process_colors(map, i, splited) == 1)

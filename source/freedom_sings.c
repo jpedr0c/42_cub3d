@@ -50,7 +50,6 @@ void	free_map(t_map *map)
 	free(map->so);
 	free(map->we);
 	free(map->ea);
-	free(map->door);
 	free(map);
 }
 
@@ -93,5 +92,5 @@ void	free_all(t_vars *var)
 		free(var->sprite[i]);
 	}
 	mlx_destroy_window(var->mlx, var->win);
-	free_struct(var);
+	free_struct_var(var);
 }
