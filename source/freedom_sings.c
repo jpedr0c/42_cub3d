@@ -77,7 +77,10 @@ void	free_all(t_vars *var)
 	int	j;
 
 	mlx_destroy_image(var->mlx, var->img.img);
-	// mlx_destroy_image(var->mlx, var->tex[].img.img);
+	mlx_destroy_image(var->mlx, var->tex[TEX_NO].img.img);
+	mlx_destroy_image(var->mlx, var->tex[TEX_SO].img.img);
+	mlx_destroy_image(var->mlx, var->tex[TEX_WE].img.img);
+	mlx_destroy_image(var->mlx, var->tex[TEX_EA].img.img);
 	i = -1;
 	while (var->sprite != NULL && var->sprite[++i] != NULL)
 	{
