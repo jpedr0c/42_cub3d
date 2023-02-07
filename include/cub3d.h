@@ -113,6 +113,7 @@ typedef struct s_map
     int         crgb;
     int         aux;
     int         lines;
+    int         index;
     int         count;
     int         sprite_cnt;
     int         sprite_index;
@@ -261,6 +262,8 @@ void    free_all(t_vars *var);
 
 // GENERATE_MAP
 int     read_map(t_map *map, char *str);
+void	fill_map(t_map **map);
+int     fill_buffer(char *file, int lines, t_map *map);
 
 
 // INIT
@@ -270,6 +273,10 @@ void    init_map(t_map *map);
 int     initialize_vars(t_vars *var);
 int     inilialize_mlx(t_vars *var);
 int     init_game(t_vars *var);
+
+
+// PARSER
+int     parse_map(t_map **map);
 
 
 // PLAYER
@@ -301,6 +308,9 @@ int     is_array_digit(char **s);
 int     is_filled_map(const t_map *map);
 int     is_valid_map(t_map *map, char *str);
 int     is_valid_direction(t_map *map);
+int     above_and_below(t_map **map, int i, int j, int x);
+int     check_surroundings(t_map **map, int i, int j);
+int     last_map_check(t_map **map);
 
 
 #endif
