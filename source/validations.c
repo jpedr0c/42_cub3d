@@ -12,6 +12,17 @@
 
 # include "../include/cub3d.h"
 
+void	count_lines(t_map **map, int i)
+{
+	while ((*map)->buffer[i] && (*map)->buffer[i])
+	{
+		// IF sugerido pelo COPILOTO
+		if ((*map)->buffer[i][0] == '1' || (*map)->buffer[i][0] == ' ')
+			(*map)->height++;
+		i++;
+	}
+}
+
 int	verify_border(const char *line)
 {
 	int	i;
@@ -30,25 +41,24 @@ int	line_handler(char *line, int index, t_map **map)
 {
 	int	i;
 
-	i = skip_spaces(line, 0);
+	i = ignore_spaces(line, 0);
 	if (index == 0 || index == (*map)->height - 1)
-		return (check_top_and_bot(line));
+		return (verify_border(line));
 	else if (*line && (line[i] != '1' || line[ft_strlen(line) - 1] != '1'))
-		return (error_ret("Error\nMap not closed by 1's\n", 1));
-	while (*line && line[++i] != '\n' && line[i] != '\0')
+		return (print_error("Map not closed by 1's\n", REDN, 0));
+	while (*line && line[++i] != '\n' && line[i])
 	{
 		if (!(line[i] == '0' || line[i] == '1' || line[i] == 'N'
 				|| line[i] == ' ' || line[i] == 'E'
-				|| line[i] == 'W' || line[i] == 'S'
-				|| line[i] == 'C' || line[i] == 'O'))
-			return (error_ret("Error\nInvalid character on the map\n", 1));
+				|| line[i] == 'W' || line[i] == 'S'))
+			return (print_error("Invalid character on the map\n", REDN, 0));
 		else
 		{
-			if (counter(line[i], map) != 0)
-				return (error_ret("Error\nToo many player spawns\n", 1));
+			if (!is_valid_direction((*map)))
+				return (print_error("Too many player spawns\n", REDN, 0));
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int	is_valid_args(int argc, char **argv)
