@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 18:05:54 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/03 15:16:54 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/07 14:26:36 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../include/cub3d.h"
+
+int	load_texture(t_vars *var, t_tex *tex, char *img_path)
+{
+	if (img_path == NULL)
+		return (print_error("Path to image is null", REDN, 0));
+	tex->img.img = mlx_xpm_file_to_image(var->mlx, img_path, &tex->w, &tex->h);
+	if (tex->img.img == NULL)
+		return (print_error("Failed to convert xpm file to image", REDN, 0));
+	tex->img.addr = mlx_get_data_addr(tex->img.img, &tex->img.bpp, &tex->img.line_len, &tex->img.endian);
+	if (tex->img.addr == NULL)
+		return (print_error("Failed to get image address", REDN, 0));
+	return (1);
+}
+
+int	init_texture(t_vars *var)
+{
+	if (!load_texture(var, &var->tex[TEX_NO], var->map->no)
+		|| !load_texture(var, &var->tex[TEX_SO], var->map->so)
+		|| !load_texture(var, &var->tex[TEX_WE], var->map->we)
+		|| !load_texture(var, &var->tex[TEX_EA], var->map->ea))
+		return (0);
+	return (1);
+}
 
 int	open_texture(t_map *map)
 {
@@ -110,4 +133,23 @@ int get_texture_NO_SO(t_map **map, int i)
 		return (1);
 	else
 		return (0);
+}
+
+int parse_texture(t_map *map)
+{
+    int i;
+
+    i = -1;
+    while (map->buffer[++i] && is_filled_map(map))
+    {
+        if ((ft_strncmp(map->buffer[*i], "\n", 1) == 0
+			|| ft_strncmp(map->buffer[*i], "\0", 1) == 0))
+		    break;
+    }
+    if (!map->no || !map->so || !map->we || !map->ea || !map->s || !map->frgb || !map->crgb)
+        return (print_error("Missing texture\n", REDN, 0));
+    if (open_texture(map) == 0)
+        return (print_error("Invalid texture\n", REDN, 0));
+    map->aux = i;
+    return (i);
 }
