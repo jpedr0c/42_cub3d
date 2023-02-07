@@ -237,11 +237,15 @@ int     handle_keypress(int keycode, t_vars *var);
 // DRAW
 void    init_ray(t_vars *var, t_ray *ray, int x);
 void	init_step_and_sidedist(t_vars *var, t_ray *ray);
+int     get_pixel_color(t_img *img, int x, int y);
+void	img_pixel_put(t_img *img, int x, int y, int color);
+void	img_paste_pixel(t_img *img, int x, int y, int pixel);
 void    check_colision_wall(t_vars *var, t_ray *ray);
 void    dda(t_vars *var, t_ray *ray);
 void    calculate_screen_line(t_ray *ray);
 void    draw_vertical_line(t_vars *var, t_ray *ray, int w);
 void	raycast_wall(t_vars *var);
+void	draw_square(t_vars *var);
 void    draw(t_vars *var);
 
 
@@ -285,6 +289,8 @@ int     start_dir_player(t_vars *var);
 
 
 // TEXTURE
+int     load_texture(t_vars *var, t_tex *tex, char *img_path);
+int     init_texture(t_vars *var);
 int     open_texture(t_map *map);
 void	set_texture_id(t_ray *ray);
 void    calculate_texture_data(t_vars *var, t_ray *ray);
