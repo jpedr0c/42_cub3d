@@ -17,8 +17,6 @@ int	create_rgba(int r, int g, int b, int a)
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-// Funçao que irá processar as cores do mapa
-
 int process_colors(t_map **map, int i, char **ptr)
 {
     int tmp[3];
@@ -46,4 +44,44 @@ int process_colors(t_map **map, int i, char **ptr)
         (*map)->crgb = create_rgba(tmp[0], tmp[1], tmp[2], 0);
     }
     return (1);
+}
+
+int read_color(t_map **map, int i)
+{
+    char *aux;
+    char **splited;
+
+    if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
+        || ft_strncmp((*map)->buffer[i], "C", 1) == 0)
+    {
+        aux = ft_substr(*map)->buffer[i], 2, ft_strlen(*map)->buffer[i]) - 1);
+        splited = ft_split(aux, ',');
+        free(aux);
+        if (process_colors(map, i, splited) == 1)
+            return (print_error("Invalid Colour\n", REDN, 0));
+    }
+    else
+        return (0);
+    if (splited)
+        free_split(splited);
+    return (1);
+}
+
+int parse_texture(t_map *map)
+{
+    int i;
+
+    i = -1;
+    while (map->buffer[++i] && is_filled_map(map))
+    {
+        if ((ft_strncmp(map->buffer[*i], "\n", 1) == 0
+			|| ft_strncmp(map->buffer[*i], "\0", 1) == 0))
+		    break;
+    }
+    if (!map->no || !map->so || !map->we || !map->ea || !map->s || !map->frgb || !map->crgb)
+        return (print_error("Missing texture\n", REDN, 0));
+    if (open_texture(map) == 0)
+        return (print_error("Invalid texture\n", REDN, 0));
+    map->aux = i;
+    return (i);
 }
