@@ -217,8 +217,15 @@ typedef struct s_sprite_util
 }   t_sprite_util;
 
 
-//CUB3D
+// CUB3D
 int     main (int argc, char **argv);
+
+
+// COLORS
+int	create_rgba(int r, int g, int b, int a);
+int process_colors(t_map **map, int i, char **ptr);
+int read_color(t_map **map, int i);
+int parse_texture(t_map *map);
 
 
 // CONTROLS
@@ -247,7 +254,8 @@ void    print_error_exit(char *str, char *color, int exit_code);
 // FREEDOM_SINGS
 void    free_split(char **splited);
 void    free_map(t_map *map);
-void    free_struct(t_vars *var);
+void    free_struct_var(t_vars *var);
+int     free_struct_map(t_map *map, int back);
 void    free_all(t_vars *var);
 
 
@@ -264,15 +272,35 @@ int     inilialize_mlx(t_vars *var);
 int     init_game(t_vars *var);
 
 
+// PLAYER
+void    set_dir(t_player *g, int dir_x, int dir_y);
+void    set_plane(t_player *g, float plane_x, float plane_y);
+int     start_dir_player(t_vars *var);
+
+
 // TEXTURE
+int     open_texture(t_map *map);
 void	set_texture_id(t_ray *ray);
 void    calculate_texture_data(t_vars *var, t_ray *ray);
+int     get_texture_WE_EA(t_map **map, int i);
+int     get_texture_NO_SO(t_map **map, int i);
 
 
 // UTILS
-int     is_valid_args(int argc, char **argv);
-int     is_valid_map(t_map *map, char *str);
+int     ignore_spaces(char *line, int i);
+int     array_length(char **s);
 void    print_message(char *str, char *color);
+
+
+// VALIDATION
+void    count_lines(t_map **map, int i);
+int     verify_border(const char *line);
+int     line_handler(char *line, int index, t_map **map);
+int     is_valid_args(int argc, char **argv);
+int     is_array_digit(char **s);
+int     is_filled_map(const t_map *map);
+int     is_valid_map(t_map *map, char *str);
+int     is_valid_direction(t_map *map);
 
 
 #endif
