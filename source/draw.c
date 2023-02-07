@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 14:19:53 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/01 18:17:32 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/07 14:45:37 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,49 @@ void	init_step_and_sidedist(t_vars *var, t_ray *ray)
 		ray->side_dist_y = (ray->map_y + 1.0 - var->g.pos_y)
 			* ray->delta_dist_x;
 	}
+}
+
+int	get_pixel_color(t_img *img, int x, int y)
+{
+	int	color;
+	char *dst;
+
+	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	color = *(unsigned int *)dst;
+	return (color);
+}
+
+void	img_pixel_put(t_img *img, int x, int y, int color)
+{
+	int pixel;
+
+	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
+		return ;
+	pixel = (x * (img->bpp / 8) + (y * img->line_len));
+	if (img->endian == 1)
+	{
+		img->addr[pixel + 0] = (color >> 24);
+		img->addr[pixel + 1] = (color >> 16) & 0xFF;
+		img->addr[pixel + 2] = (color >> 8) & 0xFF;
+		img->addr[pixel + 3] = (color) & 0xFF;
+	}
+	else if (img->endian == 0)
+	{
+		img->addr[pixel + 0] = (color) & 0xFF;
+		img->addr[pixel + 1] = (color >> 8) & 0xFF;
+		img->addr[pixel + 2] = (color >> 16) & 0xFF;
+		img->addr[pixel + 3] = (color >> 24);
+	}
+}
+
+void	img_paste_pixel(t_img *img, int x, int y, int pixel)
+{
+	char *dst;
+
+	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
+		return ;
+	dst = img->addr + (x * (img->bpp / 8) + (y * img->line_len));
+	*(unsigned int *)dst = pixel;
 }
 
 void    check_colision_wall(t_vars *var, t_ray *ray)
@@ -147,9 +190,7 @@ void	draw(t_vars *var)
 	var->door_hit[1] = -1;
 	ft_bzero(var->img.addr, HEIGHT * WIDTH * (var->img.bpp / 8));
 	// TODO: Função de Raycast das paredes
-	// TODO: Função de Raycast sprite
 	// TODO: Função de colocar um quadrado no centro da tela
 	mlx_put_image_to_window(var->mlx, var->win, var->img.img, 0, 0);
-	// TODO: Função do minimap
 	// TODO: Função para mostrar na tela os controles
 }
