@@ -79,3 +79,20 @@ int	fill_buffer(char *file, int lines, t_map *map)
 	close(fd);
 	return (1);
 }
+
+int	init_parser(t_map *map, char *str)
+{
+	if (map->lines == 0)
+		return (print_error("Empty map\n", REDN, 0));
+	if (map->lines == 0)
+		return (print_error("Empty map\n", REDN, 0));
+	if (parse_texture(map) < 0)
+		return (0);
+	if (parse_map(&map) != 0)
+		return (free_struct_map(map, 0));
+	if (last_map_check(&map) != 0)
+		return (free_struct_map(map, 0));
+	if (map->p_pos[0] == -1 || map->p_pos[1] == -1)
+		free_struct_map(map, 0);
+	return (1);
+}
