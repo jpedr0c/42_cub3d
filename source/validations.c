@@ -45,20 +45,20 @@ int	line_handler(char *line, int index, t_map **map)
 	if (index == 0 || index == (*map)->height - 1)
 		return (verify_border(line));
 	else if (*line && (line[i] != '1' || line[ft_strlen(line) - 1] != '1'))
-		return (print_error("Map not closed by 1's\n", REDN, 0));
+		return (print_error("Map not closed by 1's\n", REDN, 1));
 	while (*line && line[++i] != '\n' && line[i])
 	{
 		if (!(line[i] == '0' || line[i] == '1' || line[i] == 'N'
 				|| line[i] == ' ' || line[i] == 'E'
 				|| line[i] == 'W' || line[i] == 'S'))
-			return (print_error("Invalid character on the map\n", REDN, 0));
+			return (print_error("Invalid character on the map\n", REDN, 1));
 		else
 		{
 			if (!is_valid_direction((*map)))
-				return (print_error("Too many player spawns\n", REDN, 0));
+				return (print_error("Too many player spawns\n", REDN, 1));
 		}
 	}
-	return (1);
+	return (0);
 }
 
 int	is_valid_args(int argc, char **argv)

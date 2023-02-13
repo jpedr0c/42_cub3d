@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:47:18 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/07 18:37:23 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/13 08:25:01 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,92 +14,142 @@
 
 void	vertical_player_move(int keycode, t_vars *var, float speed)
 {
-	t_player	*g;
-	char		**map;
+	t_player		*p;
+	char	**m;
 
-	g = &var->g;
-	map = var->map->map;
-	if (keycode == KEY_SHIFT)
-		speed *= 2.00;
-	else if (keycode == KEY_W)
+	p = &vars->p;
+	m = vars->map->map;
+	if (vars->keys.shift == 1)
+		speed *= (float)SHIFT_MOD;
+	if (keycode == KEY_W)
 	{
-		if (map[(int)g->pos_y][(int)(g->pos_x + g->dir_x * speed)] == FLOOR)
-			g->pos_x += g->dir_x * speed;
-		if (map[(int)(g->pos_y + g->dir_y * speed)][(int)g->pos_x] == FLOOR)
-			g->pos_y += g->dir_y * speed;
+		if (m[(int)p->pos_y][(int)(p->pos_x + p->dir_x * speed)] == FLOOR)
+			p->pos_x += p->dir_x * speed;
+		if (m[(int)(p->pos_y + p->dir_y * speed)][(int)p->pos_x] == FLOOR)
+			p->pos_y += p->dir_y * speed;
 	}
 	else if (keycode == KEY_S)
 	{
-		if (map[(int)g->pos_y][(int)(g->pos_x - g->dir_x * speed)] == FLOOR)
-			g->pos_x -= g->dir_x * speed;
-		if (map[(int)(g->pos_y - g->dir_y * speed)][(int)g->pos_x] == FLOOR)
-			g->pos_y -= g->dir_y * speed;
+		if (m[(int)p->pos_y][(int)(p->pos_x - p->dir_x * speed)] == FLOOR)
+			p->pos_x -= p->dir_x * speed;
+		if (m[(int)(p->pos_y - p->dir_y * speed)][(int)p->pos_x] == FLOOR)
+			p->pos_y -= p->dir_y * speed;
 	}
 }
 
 void	horizontal_player_move(int keycode, t_vars *var, float speed)
 {
-	t_player	*g;
-	char		**map;
+	t_player		*p;
+	char	**m;
 
-	g = &var->g;
-	map = var->map->map;
-	if (keycode == KEY_SHIFT)
-		speed *= (float)2;
+	p = &vars->p;
+	m = vars->map->map;
+	if (vars->keys.shift == TRUE)
+		speed *= (float)SHIFT_MOD;
+	if (keycode == KEY_D)
+	{
+		if (m[(int)p->pos_y][(int)(p->pos_x - p->plane_x * speed)] == FLOOR)
+			p->pos_x -= p->plane_x * speed;
+		if (m[(int)(p->pos_y - p->plane_y * speed)][(int)p->pos_x] == FLOOR)
+			p->pos_y -= p->plane_y * speed;
+	}
 	else if (keycode == KEY_A)
 	{
-		if (map[(int)g->pos_y][(int)(g->pos_x + g->plane_x * speed)] == FLOOR)
-			g->pos_x += g->plane_x * speed;
-		if (map[(int)(g->pos_y + g->plane_y * speed)][(int)g->pos_x] == FLOOR)
-			g->pos_y += g->plane_y * speed;
-	}
-	else if (keycode == KEY_D)
-	{
-		if (map[(int)g->pos_y][(int)(g->pos_x - g->plane_x * speed)] == FLOOR)
-			g->pos_x -= g->plane_x * speed;
-		if (map[(int)(g->pos_y - g->plane_y * speed)][(int)g->pos_x] == FLOOR)
-			g->pos_y -= g->plane_y * speed;
+		if (m[(int)p->pos_y][(int)(p->pos_x + p->plane_x * speed)] == FLOOR)
+			p->pos_x += p->plane_x * speed;
+		if (m[(int)(p->pos_y + p->plane_y * speed)][(int)p->pos_x] == FLOOR)
+			p->pos_y += p->plane_y * speed;
 	}
 }
 
 void	change_vision_player(int keycode, t_vars *var, float speed)
 {
-	t_player	*g;
-	float		old_dir_x;
-	float		old_plane_x;
+	t_player		*p;
+	float	old_dir_x;
+	float	old_plane_x;
 
-	g = &var->g;
+	p = &vars->p;
 	if (keycode == ARROW_LEFT)
 	{
-		old_dir_x = g->dir_x;
-		g->dir_x = g->dir_x * cos(-speed) - g->dir_y * sin(-speed);
-		g->dir_y = g->dir_x * sin(-speed) + g->dir_y * cos(-speed);
-		old_plane_x = g->plane_x;
-		g->plane_x = g->plane_x * cos(-speed) - g->plane_y * sin(-speed);
-		g->plane_y = old_plane_x * sin(-speed) + g->plane_y * cos(-speed);
+		old_dir_x = p->dir_x;
+		p->dir_x = p->dir_x * cos(-speed) - p->dir_y * sin(-speed);
+		p->dir_y = old_dir_x * sin(-speed) + p->dir_y * cos(-speed);
+		old_plane_x = p->plane_x;
+		p->plane_x = p->plane_x * cos(-speed) - p->plane_y * sin(-speed);
+		p->plane_y = old_plane_x * sin(-speed) + p->plane_y * cos(-speed);
 	}
 	else if (keycode == ARROW_RIGHT)
 	{
-		old_dir_x = g->dir_x;
-		g->dir_x = g->dir_x * cos(speed) - g->dir_y * sin(speed);
-		g->dir_y = g->dir_x * sin(speed) + g->dir_y * cos(speed);
-		old_plane_x = g->plane_x;
-		g->plane_x = g->plane_x * cos(speed) - g->plane_y * sin(speed);
-		g->plane_y = old_plane_x * sin(speed) + g->plane_y * cos(speed);
+		old_dir_x = p->dir_x;
+		p->dir_x = p->dir_x * cos(speed) - p->dir_y * sin(speed);
+		p->dir_y = old_dir_x * sin(speed) + p->dir_y * cos(speed);
+		old_plane_x = p->plane_x;
+		p->plane_x = p->plane_x * cos(speed) - p->plane_y * sin(speed);
+		p->plane_y = old_plane_x * sin(speed) + p->plane_y * cos(speed);
 	}
 }
 
-int	handle_keypress(int keycode, t_vars *var)
+int	key_press_hook(int keycode, t_vars *vars)
 {
 	if (keycode == KEY_ESC)
-		close_window(var);
-	else if (keycode == KEY_W || keycode == KEY_S)
-		vertical_player_move(keycode, var, 0.05);
-	else if (keycode == KEY_A || keycode == KEY_D)
-		horizontal_player_move(keycode, var, 0.05);
-	else if (keycode == ARROW_LEFT || keycode == ARROW_RIGHT)
-		change_vision_player(keycode, var, 0.05);
-	// else if (keycode == KEY_SHIFT)
-	//     // TODO: Aumentar velocidade
+		close_win(vars);
+	else if (keycode == KEY_W)
+		vars->keys.w = 1;
+	else if (keycode == KEY_A)
+		vars->keys.a = 1;
+	else if (keycode == KEY_S)
+		vars->keys.s = 1;
+	else if (keycode == KEY_D)
+		vars->keys.d = 1;
+	else if (keycode == KEY_RIGHT)
+		vars->keys.right_arrow = 1;
+	else if (keycode == KEY_LEFT)
+		vars->keys.left_arrow = 1;
+	else if (keycode == KEY_SHIFT)
+		vars->keys.shift = 1;
 	return (0);
+}
+
+int	key_relase_hook(int keycode, t_vars *vars)
+{
+	if (keycode == KEY_W)
+		vars->keys.w = 0;
+	else if (keycode == KEY_A)
+		vars->keys.a = 0;
+	else if (keycode == KEY_S)
+		vars->keys.s = 0;
+	else if (keycode == KEY_D)
+		vars->keys.d = 0;
+	else if (keycode == KEY_RIGHT)
+		vars->keys.right_arrow = 0;
+	else if (keycode == KEY_LEFT)
+		vars->keys.left_arrow = 0;
+	else if (keycode == KEY_SHIFT)
+		vars->keys.shift = 0;
+	return (0);
+}
+
+void	handle_keypress(t_vars *var)
+{
+	if (vars->keys.w != vars->keys.s)
+	{
+		if (vars->keys.w == TRUE)
+			vertical_player_move(KEY_W, vars, DEFAULT_SPEED);
+		else if (vars->keys.s == TRUE)
+			vertical_player_move(KEY_S, vars, DEFAULT_SPEED);
+	}
+	if (vars->keys.a != vars->keys.d)
+	{
+		if (vars->keys.a == TRUE)
+			horizontal_player_move(KEY_A, vars, DEFAULT_SPEED);
+		else if (vars->keys.d == TRUE)
+			horizontal_player_move(KEY_D, vars, DEFAULT_SPEED);
+	}
+	if (vars->keys.right_arrow != vars->keys.left_arrow)
+	{
+		if (vars->keys.right_arrow == TRUE)
+			change_vision_player(KEY_RIGHT, vars, DEFAULT_ROT_SPEED);
+		else if (vars->keys.left_arrow == TRUE)
+			change_vision_player(KEY_LEFT, vars, DEFAULT_ROT_SPEED);
+	}
 }

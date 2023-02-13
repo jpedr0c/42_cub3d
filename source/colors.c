@@ -45,23 +45,41 @@ int process_colors(t_map **map, int i, char **ptr)
     return (1);
 }
 
-int read_color(t_map **map, int i)
+int	read_colour(t_map **map, int i)
 {
-    char *aux;
-    char **splited;
+	char	*aux;
+	char	**split;
 
-    if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
-        || ft_strncmp((*map)->buffer[i], "C", 1) == 0)
-    {
-        aux = ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1);
-        splited = ft_split(aux, ',');
-        free(aux);
-        if (process_colors(map, i, splited) == 1)
-            return (print_error("Invalid Colour\n", REDN, 0));
-    }
-    else
-        return (0);
-    if (splited)
-        free_split(splited);
-    return (1);
+	if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
+		|| ft_strncmp((*map)->buffer[i], "C", 1) == 0)
+	{
+		aux = ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1);
+		split = ft_split(ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1), ',');
+		free(aux);
+		if (process_colour(map, i, split) == 1)
+			return (error_ret("Error\nInvalid Colour\n", 1));
+	}
+	else
+		return (1);
+	if (split)
+		free_split(split);
+	return (0);
 }
+
+// Função refatorada
+// static int	read_colour(t_map **map, int i)
+// {
+// 	char	**split;
+
+// 	if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
+// 		|| ft_strncmp((*map)->buffer[i], "C", 1) == 0)
+// 	{
+// 		split = ft_split(ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1), ',');
+// 		if (process_colour(map, i, ft_split(ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1), ',')) == 1)
+// 			return (error_ret("Error\nInvalid Colour\n", 1));
+// 		free_split(split);
+// 	}
+// 	else
+// 		return (1);
+// 	return (0);
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 14:19:53 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/07 18:40:04 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/13 08:12:09 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ void	draw_square(t_vars *var)
 	float	x;
 	float	y;
 
-	side_len = 10;
+	side_len = 7;
 	coords[0] = HEIGHT / 2 - side_len / 2;
 	coords[1] = WIDTH / 2 - side_len / 2;
 
@@ -206,8 +206,6 @@ void	draw_square(t_vars *var)
 
 void	draw(t_vars *var)
 {
-	var->door_hit[0] = -1;
-	var->door_hit[1] = -1;
 	ft_bzero(var->img.addr, HEIGHT * WIDTH * (var->img.bpp / 8));
 	raycast_wall(var);
 	draw_square(var);

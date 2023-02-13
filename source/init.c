@@ -25,12 +25,10 @@ int	close_window(t_vars *var)
 
 int	game_loop(t_vars *var)
 {
-	int keycode;
-
-	keycode = 0;
 	if (++var->frame >= 60)
 		var->frame = 0;
-	handle_keypress(keycode, var);
+	handle_keypress(var);
+	draw(var);
 	return (0);
 }
 
@@ -67,13 +65,14 @@ int	initialize_vars(t_vars *var)
 
 int	inilialize_mlx(t_vars *var)
 {
-	var->mlx = mlx_init();
-	var->img.img = mlx_new_image(var->mlx, WIDTH, HEIGHT);
-	var->img.addr = mlx_get_data_addr(var->img.img, &var->img.bpp, &var->img.line_len, &var->img.endian);
-	var->win = mlx_new_window(var->mlx, WIDTH, HEIGHT, "cub3D");
-	if (init_texture(var))
-		return (0);
-	return (1);
+	vars->mlx = mlx_init();
+	vars->img.img = mlx_new_image(vars->mlx, WIN_W, WIN_H);
+	vars->img.addr = mlx_get_data_addr(vars->img.img,
+			&vars->img.bpp, &vars->img.line_len, &vars->img.endian);
+	vars->win = mlx_new_window(vars->mlx, WIN_W, WIN_H, "cub3D");
+	if (init_textures(vars) != 0)
+		return (1);
+	return (0);
 }
 
 int	init_game(t_vars *var)
@@ -84,13 +83,12 @@ int	init_game(t_vars *var)
 		print_error_exit("Unable to allocate variables", REDN, 1);
 	}
 	if (!inilialize_mlx(var))
-		return (0);
-	mlx_hook(var->win, 2, (1L << 0), handle_keypress, var);
-	// mlx_hook(var->win, 3, (1L << 1), KEY_RELEASE, var);
+		return (1);
+	mlx_hook(var->win, 2, (1L << 0), key_press_hook, var);
+	mlx_hook(var->win, 3, (1L << 1), key_release_hook, var);
 	mlx_hook(var->win, 17, (1L << 17), close_window, var);
-	// BONUS : mlx_hook(var->win, 6, (1L << 6), MOUSE_HOOK, var);
 	mlx_loop_hook(var->mlx, game_loop, var);
 	mlx_loop(var->mlx);
 	free_all(var);
-	return (1);
+	return (0);
 }
