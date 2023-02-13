@@ -188,9 +188,25 @@ int last_map_check(t_map **map)
 			{
 				j = check_surroundings(map, i, j);
 				if (j == 0)
-					return (print_error("Map isn't closed by wall\n", REDN, 0));
+					return (print_error("Map isn't closed by wall\n", REDN, 1));
 			}
 		}
 	}
-	return (1);
+	return (0);
+}
+
+void skip_empty_lines(t_map **map)
+{
+	while ((*map)->buffer[(*map)->aux]
+    	&& !(*map)->buffer[(*map)->aux][0])
+	{
+    	(*map)->aux++;
+  	}
+	(*map)->index = (*map)->aux;
+}
+
+void check_width(t_map **map) 
+{
+  if ((int)ft_strlen((*map)->buffer[(*map)->aux]) > (*map)->width) 
+    (*map)->width = (int)ft_strlen((*map)->buffer[(*map)->aux]);
 }

@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:47:18 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/13 08:25:01 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/13 11:29:12 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	vertical_player_move(int keycode, t_vars *var, float speed)
 	p = &vars->p;
 	m = vars->map->map;
 	if (vars->keys.shift == 1)
-		speed *= (float)SHIFT_MOD;
+		speed *= (float)2.0;
 	if (keycode == KEY_W)
 	{
 		if (m[(int)p->pos_y][(int)(p->pos_x + p->dir_x * speed)] == FLOOR)
@@ -44,8 +44,8 @@ void	horizontal_player_move(int keycode, t_vars *var, float speed)
 
 	p = &vars->p;
 	m = vars->map->map;
-	if (vars->keys.shift == TRUE)
-		speed *= (float)SHIFT_MOD;
+	if (vars->keys.shift == 1)
+		speed *= (float)2.0;
 	if (keycode == KEY_D)
 	{
 		if (m[(int)p->pos_y][(int)(p->pos_x - p->plane_x * speed)] == FLOOR)
@@ -133,23 +133,23 @@ void	handle_keypress(t_vars *var)
 {
 	if (vars->keys.w != vars->keys.s)
 	{
-		if (vars->keys.w == TRUE)
-			vertical_player_move(KEY_W, vars, DEFAULT_SPEED);
-		else if (vars->keys.s == TRUE)
-			vertical_player_move(KEY_S, vars, DEFAULT_SPEED);
+		if (vars->keys.w == 1)
+			vertical_player_move(KEY_W, vars, 0.05);
+		else if (vars->keys.s == 1)
+			vertical_player_move(KEY_S, vars, 0.05);
 	}
 	if (vars->keys.a != vars->keys.d)
 	{
-		if (vars->keys.a == TRUE)
-			horizontal_player_move(KEY_A, vars, DEFAULT_SPEED);
-		else if (vars->keys.d == TRUE)
-			horizontal_player_move(KEY_D, vars, DEFAULT_SPEED);
+		if (vars->keys.a == 1)
+			horizontal_player_move(KEY_A, vars, 0.05);
+		else if (vars->keys.d == 1)
+			horizontal_player_move(KEY_D, vars, 0.05);
 	}
 	if (vars->keys.right_arrow != vars->keys.left_arrow)
 	{
-		if (vars->keys.right_arrow == TRUE)
-			change_vision_player(KEY_RIGHT, vars, DEFAULT_ROT_SPEED);
-		else if (vars->keys.left_arrow == TRUE)
-			change_vision_player(KEY_LEFT, vars, DEFAULT_ROT_SPEED);
+		if (vars->keys.right_arrow == 1)
+			change_vision_player(KEY_RIGHT, vars, 0.05);
+		else if (vars->keys.left_arrow == 1)
+			change_vision_player(KEY_LEFT, vars, 0.05);
 	}
 }

@@ -30,7 +30,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	ft_putstr_fd("Starting minilibx...\n", STDOUT_FILENO);
 	if (mlx_main(vars) != 0)
-		return (EXIT_FAILURE);
+		return (1);
 	ft_putstr_fd("Quit\n", STDOUT_FILENO);
-	return (EXIT_SUCCESS);
+	return (0);
 }

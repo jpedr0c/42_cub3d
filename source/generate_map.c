@@ -22,7 +22,7 @@ int	read_map(t_map *map, char *str)
 
 	fd = open(str, O_RDONLY);
 	if (fd < 0)
-		print_error("It's not possible to open file", REDN, 0);
+		print_error("It's not possible to open file", REDN, 1);
 	aux = get_next_line(fd);
 	while (aux)
 	{
@@ -31,7 +31,7 @@ int	read_map(t_map *map, char *str)
 		aux = get_next_line(fd);
 	}
 	close(fd);
-	return (1);
+	return (0);
 }
 
 void fill_map(t_map **map)
@@ -81,16 +81,16 @@ int fill_buffer(char *file, int lines, t_map *map)
 int	init_parser(t_map *map, char *str)
 {
 	if (map->lines == 0)
-		return (print_error("Empty map\n", REDN, 0));
+		return (print_error("Empty map\n", REDN, 1));
 	if (!fill_buffer(str, map->lines, map))
-		return (print_error("Fatal error\n", REDN, 0));
+		return (print_error("Fatal error\n", REDN, 1));
 	if (parse_texture(map) < 0)
-		return (0);
+		return (1);
 	if (parse_map(&map) != 0)
-		return (free_struct_map(map, 0));
+		return (free_with_exit(map, 1));
 	if (last_map_check(&map) != 0)
-		return (free_struct_map(map, 0));
+		return (free_with_exit(map, 1));
 	if (map->p_pos[0] == -1 || map->p_pos[1] == -1)
-		free_struct_map(map, 0);
-	return (1);
+		free_with_exit(map, 1);
+	return (0);
 }

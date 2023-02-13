@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 18:05:54 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/13 08:36:01 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/13 13:38:00 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,12 @@ int	open_texture(t_map *map)
 	fd[2] = open(map->we, O_RDONLY);
 	fd[3] = open(map->ea, O_RDONLY);
 	if (fd[0] == -1 || fd[1] == -1 || fd[2] == -1 || fd[3] == -1)
-		return (0);
+		return (1);
 	close(fd[0]);
 	close(fd[1]);
 	close(fd[2]);
 	close(fd[3]);
-	close(fd[4]);
-	return (1);
+	return (0);
 }
 
 void	set_texture_id(t_ray *ray)
@@ -71,61 +70,105 @@ void	set_texture_id(t_ray *ray)
 	}
 }
 
-void    calculate_texture_data(t_vars *var, t_ray *ray)
+// Serve para calcular a posição da parede que colidiu
+void calculate_wall_coordinate(t_vars *vars, t_ray *ray)
 {
     if (ray->side == 0)
-        ray->wall_x = var->g.pos_y + ray->perp_wall_dist * ray->dir_y;
-    else
-        ray->wall_x = var->g.pos_x + ray->perp_wall_dist * ray->dir_x;
-    ray->wall_x -= floor((ray->wall_x));
-    ray->tex_x = (int)(ray->wall_x * (float)TEX_W);
-    if (ray->side == 0 && ray->dir_x > 0)
-        ray->tex_x = var->tex[ray->texture_id].w - ray->tex_x - 1;
-    if (ray->side == 1 && ray->dir_y < 0)
-        ray->tex_x = var->tex[ray->texture_id].w - ray->tex_x - 1;
+        ray->wall_x = vars->p.pos_y + ray->perp_wall_dist * ray->dir_y;
+	else
+        ray->wall_x = vars->p.pos_x + ray->perp_wall_dist * ray->dir_x;
+    ray->wall_x -= floor(ray->wall_x);
+}
+
+// Calcula a coordenada X da textura que será usada para desenhar a parede
+void calculate_texture_coordinate(t_vars *vars, t_ray *ray)
+{
+    ray->tex_x = (int)(ray->wall_x * TEX_W);
+    if ((ray->side == 0 && ray->dir_x > 0) ||
+		(ray->side == 1 && ray->dir_y < 0))
+        ray->tex_x = vars->tex[ray->texture_id].w - ray->tex_x - 1;
+}
+
+void    calculate_texture_data(t_vars *var, t_ray *ray)
+{
+	calculate_wall_coordinate(var, ray);
+    calculate_texture_coordinate(var, ray);
     ray->step = 1.0 * var->tex[ray->texture_id].h / ray->line_height;
     ray->tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2) * ray->step;
 }
 
-int get_texture_WE_EA(t_map **map, int i)
+int valid_map(char *direction)
 {
-	if (!ft_strncmp((*map)->buffer[i], "WE", 2))
-	{
-		if ((*map)->we)
-			return (error_ret("Error\nDuplicated texture2\n", 1));
-		(*map)->we = ft_substr((*map)->buffer[i], 3, ft_strlen((*map)->buffer[i]));
-		return (0);
-	}
-	else if (!ft_strncmp((*map)->buffer[i], "EA", 2))
-	{
-		if ((*map)->ea)
-			return (error_ret("Error\nDuplicated texture1\n", 1));
-		(*map)->ea = ft_substr((*map)->buffer[i], 3, ft_strlen((*map)->buffer[i]));
-		return (0);
-	}
-	return (1);
-}
-
-int get_texture_NO_SO(t_map *map, int i)
-{
-	if (!ft_strncmp((map)->buffer[i], "NO", 2))
-	{
-		if ((map)->no)
-			return (error_ret("Error\nDuplicated texture3\n", 1));
-		(map)->no = ft_substr((map)->buffer[i], 3, ft_strlen((map)->buffer[i]));
-	}
-	else if (!ft_strncmp((map)->buffer[i], "SO", 2))
-	{
-		if ((map)->so)
-			return (error_ret("Error\nDuplicated texture4\n", 1));
-		(map)->so = ft_substr((map)->buffer[i], 3, ft_strlen((map)->buffer[i]));
-	}
-	else if (read_texture2(&map, i) == 0)
-		return (0);
-	else if (read_colour(&map, i) == 1)
-		return (1);
+	if (direction)
+		return (error_ret("Error\nDuplicated texture\n", 1));
 	return (0);
 }
+
+void	get_texture(t_map *map, int i)
+{
+	if (!ft_strncmp(map->buffer[i], "NO", 2))
+	{
+		if (!valid_map(map->no))
+			map->no = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
+	}
+	else if (!ft_strncmp(map->buffer[i], "SO", 2))
+	{
+		if (!valid_map(map->so))
+			map->so = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
+	}
+	else if (!ft_strncmp(map->buffer[i], "WE", 2))
+	{
+		if (!valid_map(map->we))
+			map->we = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
+	}
+	else if (!ft_strncmp(map->buffer[i], "EA", 2))
+	{
+		if (!valid_map(map->ea))
+			map->ea = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
+	}
+	else if (read_colour(&map, i) == 1)
+		;
+}
+
+// int get_texture_WE_EA(t_map **map, int i)
+// {
+// 	if (!ft_strncmp((*map)->buffer[i], "WE", 2))
+// 	{
+// 		if ((*map)->we)
+// 			return (error_ret("Error\nDuplicated texture2\n", 1));
+// 		(*map)->we = ft_substr((*map)->buffer[i], 3, ft_strlen((*map)->buffer[i]));
+// 		return (0);
+// 	}
+// 	else if (!ft_strncmp((*map)->buffer[i], "EA", 2))
+// 	{
+// 		if ((*map)->ea)
+// 			return (error_ret("Error\nDuplicated texture1\n", 1));
+// 		(*map)->ea = ft_substr((*map)->buffer[i], 3, ft_strlen((*map)->buffer[i]));
+// 		return (0);
+// 	}
+// 	return (1);
+// }
+
+// int get_texture_NO_SO(t_map *map, int i)
+// {
+// 	if (!ft_strncmp((map)->buffer[i], "NO", 2))
+// 	{
+// 		if ((map)->no)
+// 			return (error_ret("Error\nDuplicated texture3\n", 1));
+// 		(map)->no = ft_substr((map)->buffer[i], 3, ft_strlen((map)->buffer[i]));
+// 	}
+// 	else if (!ft_strncmp((map)->buffer[i], "SO", 2))
+// 	{
+// 		if ((map)->so)
+// 			return (error_ret("Error\nDuplicated texture4\n", 1));
+// 		(map)->so = ft_substr((map)->buffer[i], 3, ft_strlen((map)->buffer[i]));
+// 	}
+// 	else if (read_texture2(&map, i) == 0)
+// 		return (0);
+// 	else if (read_colour(&map, i) == 1)
+// 		return (1);
+// 	return (0);
+// }
 
 int parse_texture(t_map *map)
 {
@@ -138,7 +181,7 @@ int parse_texture(t_map *map)
 			|| ft_strncmp(map->buffer[i], "\0", 1) == 0))
 		    break;
 		else
-			get_texture_NO_SO(*map, i);
+			get_texture(map, i);
     }
     if (!map->no || !map->so || !map->we || !map->ea || !map->frgb || !map->crgb)
         return (print_error("Missing texture\n", REDN, 1));

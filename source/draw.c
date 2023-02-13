@@ -6,28 +6,38 @@
 /*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 14:19:53 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/13 08:12:09 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/13 13:33:30 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	init_ray(t_vars *var, t_ray *ray, int w)
+void set_ray_properties(t_vars *vars, t_ray *ray)
 {
 	ray->cam_x = (2 * w) / (float)WIDTH - 1;
-	ray->dir_x = var->g.dir_x + var->g.plane_x * ray->cam_x;
-	ray->dir_y = var->g.dir_y + var->g.plane_y * ray->cam_x;
-	ray->map_x = (int)var->g.pos_y;
-	if (ray->dir_x == 0)
+    ray->dir_x = vars->p.dir_x + vars->p.plane_x * ray->cam_x;
+    ray->dir_y = vars->p.dir_y + vars->p.plane_y * ray->cam_x;
+    ray->map_x = (int)vars->p.pos_x;
+    ray->map_y = (int)vars->p.pos_y;
+}
+
+void set_ray_delta_dist(t_ray *ray)
+{
+    if (ray->dir_x == 0)
 		ray->delta_dist_x = 1e30;
 	else
-		ray->delta_dist_x = 2.0;
+		ray->delta_dist_x = fabs(1 / ray->dir_x);
 	if (ray->dir_y == 0)
-		ray->delta_dist_x = 1e30;
+		ray->delta_dist_y = 1e30;
 	else
-		ray->delta_dist_y = 2.0;
+		ray->delta_dist_y = fabs(1 / ray->dir_y);
+}
+
+void init_ray(t_vars *vars, t_ray *ray, int x)
+{
+	set_ray_properties(vars, ray);
+    set_ray_delta_dist(ray);
 	ray->hit = 0;
-	ray->hit_door = 0;
 }
 
 void	init_step_and_sidedist(t_vars *var, t_ray *ray)
@@ -99,29 +109,35 @@ void	img_paste_pixel(t_img *img, int x, int y, int pixel)
 	*(unsigned int *)dst = pixel;
 }
 
-void    check_colision_wall(t_vars *var, t_ray *ray)
+void    check_collision_wall(t_vars *var, t_ray *ray)
 {
     if (var->map->map[ray->map_y][ray->map_x] == WALL)
         ray->hit = 1;
+}
+
+// essa função serve para determinar a próxima colisão do raio com uma parede
+void detect_next_collision(t_ray *ray)
+{
+    if (ray->side_dist_x < ray->side_dist_y)
+    {
+        ray->side_dist_x += ray->delta_dist_x;
+        ray->map_x += ray->step_x;
+        ray->side = 0;
+    }
+    else
+    {
+        ray->side_dist_y += ray->delta_dist_y;
+        ray->map_y += ray->step_y;
+        ray->side = 1;
+    }
 }
 
 void    dda(t_vars *var, t_ray *ray)
 {
     while (ray->hit == 0)
     {
-        if (ray->side_dist_x < ray->side_dist_y)
-        {
-            ray->side_dist_x += ray->delta_dist_x;
-            ray->map_x += ray->step_x;
-            ray->side = 0;
-        }
-        else
-        {
-            ray->side_dist_y += ray->delta_dist_y;
-            ray->map_y += ray->step_y;
-            ray->side = 1;
-        }
-        check_colision_wall(var, ray);
+        detect_next_collision(ray);
+        check_collision_wall(var, ray);
     }
 }
 
@@ -133,9 +149,9 @@ void   calculate_screen_line(t_ray *ray)
         ray->perp_wall_dist = ray->side_dist_y - ray->delta_dist_y;
     ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
     ray->draw_start = -ray->line_height / 2 + HEIGHT / 2;
+    ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
     if (ray->draw_start < 0)
         ray->draw_start = 0;
-    ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
     if (ray->draw_end >= HEIGHT)
         ray->draw_end = HEIGHT - 1;
 }

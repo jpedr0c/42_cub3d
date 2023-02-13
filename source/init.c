@@ -45,31 +45,34 @@ void	init_map(t_map *map)
 	map->frgb = 0;
 	map->lines = 0;
 	map->count = 0;
-	map->sprite_cnt = 0;
-	map->pos_cnt = 0;
 	map->p_pos[0] = -1;
 	map->p_pos[1] = -1;
-	map->pos_index = -1;
-	map->sprite_index = -1;
 }
 
 int	initialize_vars(t_vars *var)
 {
 	var->frame = -1;
+	vars->keys.w = 0;
+	vars->keys.s = 0;
+	vars->keys.a = 0;
+	vars->keys.d = 0;
+	vars->keys.right_arrow = 0;
+	vars->keys.left_arrow = 0;
+	vars->keys.shift = 0;
 	start_dir_player(var);
 	var->ray = (t_ray *)malloc(sizeof(t_ray));
 	if (!var->ray)
-		print_error("Could not allocate\n", REDN, 0); 
-	return (1);
+		print_error("Could not allocate raycasting\n", REDN, 1); 
+	return (0);
 }
 
 int	inilialize_mlx(t_vars *var)
 {
 	vars->mlx = mlx_init();
-	vars->img.img = mlx_new_image(vars->mlx, WIN_W, WIN_H);
+	vars->img.img = mlx_new_image(vars->mlx, WIDTH, HEIGHT);
 	vars->img.addr = mlx_get_data_addr(vars->img.img,
 			&vars->img.bpp, &vars->img.line_len, &vars->img.endian);
-	vars->win = mlx_new_window(vars->mlx, WIN_W, WIN_H, "cub3D");
+	vars->win = mlx_new_window(vars->mlx, WIDTH, HEIGHT, "cub3D");
 	if (init_textures(vars) != 0)
 		return (1);
 	return (0);
