@@ -26,14 +26,14 @@ int	ignore_spaces(char *line, int i)
 
 int	array_length(char **s)
 {
-	int	i;
+	int    i;
 
-	if (!s)
-		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+    if (!s)
+        return (0);
+    i = 0;
+    while (s[i])
+        i++;
+    return (i);
 }
 
 void	print_message(char *str, char *color)

@@ -250,7 +250,7 @@ int     close_window(t_vars *var);
 int     game_loop(t_vars *var);
 void    init_map(t_map *map);
 int     initialize_vars(t_vars *var);
-int     inilialize_mlx(t_vars *var);
+int     initialize_mlx(t_vars *var);
 int     init_game(t_vars *var);
 
 
@@ -293,7 +293,7 @@ int     is_valid_args(int argc, char **argv);
 int     is_array_digit(char **s);
 int     is_filled_map(const t_map *map);
 int     is_valid_map(t_map *map, char *str);
-int     is_valid_direction(t_map *map);
+int	    is_valid_direction(char c, t_map **map);
 int     above_and_below(t_map **map, int i, int j, int x);
 int     check_surroundings(t_map **map, int i, int j);
 int     last_map_check(t_map **map);

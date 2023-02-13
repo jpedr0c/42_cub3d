@@ -23,7 +23,7 @@ int process_colour(t_map **map, int i, char **ptr)
 
     if (array_length(ptr) != 3)
         return (1);
-    if (is_array_digit(ptr) == 1)
+    if (!is_array_digit(ptr))
         return (2);
     tmp[0] = ft_atoi(ptr[0]);
     tmp[1] = ft_atoi(ptr[1]);
@@ -34,13 +34,13 @@ int process_colour(t_map **map, int i, char **ptr)
     {
         if ((*map)->frgb != 0)
             return (print_error("Duplicate Colors\n", REDN, 0));
-        (*map)->frgb = create_rgba(tmp[0], tmp[1], tmp[2], 0);
+        (*map)->frgb = create_rgba(0, tmp[0], tmp[1], tmp[2]);
     }
     else
     {
         if ((*map)->crgb != 0)
-            return (print_error("Duplicate Colors\n", REDN, 1));
-        (*map)->crgb = create_rgba(tmp[0], tmp[1], tmp[2], 0);
+            return (print_error("Duplicate Colors\n", REDN, 0));
+        (*map)->crgb = create_rgba(0, tmp[0], tmp[1], tmp[2]);
     }
     return (1);
 }
@@ -56,7 +56,7 @@ int	read_colour(t_map **map, int i)
 		aux = ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1);
 		split = ft_split(ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1), ',');
 		free(aux);
-		if (process_colour(map, i, split) == 1)
+		if (!process_colour(map, i, split))
 			return (error_ret("Error\nInvalid Colour\n", 0));
 	}
 	else

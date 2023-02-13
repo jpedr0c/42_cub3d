@@ -22,7 +22,7 @@ int	read_map(t_map *map, char *str)
 
 	fd = open(str, O_RDONLY);
 	if (fd < 0)
-		print_error("It's not possible to open file", REDN, 1);
+		return(print_error("It's not possible to open file", REDN, 1));
 	aux = get_next_line(fd);
 	while (aux)
 	{
@@ -31,7 +31,7 @@ int	read_map(t_map *map, char *str)
 		aux = get_next_line(fd);
 	}
 	close(fd);
-	return (0);
+	return (1);
 }
 
 void fill_map(t_map **map)

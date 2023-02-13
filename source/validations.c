@@ -54,7 +54,7 @@ int	line_handler(char *line, int index, t_map **map)
 			return (print_error("Invalid character on the map\n", REDN, 0));
 		else
 		{
-			if (!is_valid_direction((*map)))
+			if (!is_valid_direction(line[i], map))
 				return (print_error("Too many player spawns\n", REDN, 0));
 		}
 	}
@@ -65,15 +65,13 @@ int	is_valid_args(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		print_error("Invalid number of arguments. Usage: ./cub3d map.cub",
-			REDN, 0);
-		return (0);
+		return (print_error("Invalid number of arguments. Usage: ./cub3d map.cub",
+			REDN, 0));
 	}
 	else if (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 4) != 0)
 	{
-		print_error("Invalid file extension. Accepted extension is .cub", REDN,
-			0);
-		return (0);
+		return (print_error("Invalid file extension. Accepted extension is .cub", REDN,
+			0));
 	}
 	return (1);
 }
@@ -96,7 +94,7 @@ int	is_array_digit(char **s)
 
 int is_filled_map(const t_map *map)
 {
-    return (map->no || map->so || map->we || map->ea || map->frgb || map->crgb);
+    return (!map->no || !map->so || !map->we || !map->ea || !map->frgb || !map->crgb);
 }
 
 int	is_valid_map(t_map *map, char *str)
@@ -107,24 +105,12 @@ int	is_valid_map(t_map *map, char *str)
 	return (1);
 }
 
-int	is_valid_direction(t_map *map)
+int	is_valid_direction(char c, t_map **map)
 {
-	int	i;
-	int	j;
-
-	i = -1;
-	while (++i < map->lines)
-	{
-		j = -1;
-		while (++j < map->height)
-		{
-			if (map->map[i][j] == 'N' || map->map[i][j] == 'S' || map->map[i][j] == 'E' || map->map[i][j] == 'W')
-				map->count++;
-		}
-	}
-	if (map->count > 1)
-		return (print_error("Invalid map. There is more than one direction",
-				REDN, 0));
+	if (c == 'E' || c == 'S' || c == 'W' || c == 'N')
+		(*map)->count++;
+	if ((*map)->count > 1)
+		return (0);
 	return (1);
 }
 
