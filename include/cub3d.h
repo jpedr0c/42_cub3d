@@ -81,23 +81,8 @@ enum e_keycode
 };
 # endif
 
-typedef struct s_sprite
-{
-    int     x;
-    int     y;
-    int     id;
-}   t_sprite;
-
-typedef struct s_spaux
-{
-    char    *type;
-    int     *id;
-}   t_spaux;
-
 typedef struct s_map
 {
-    t_sprite    *sprite;
-    t_spaux     *spaux;
     char        start_orientation;
     char        **map;
     char        **buffer;
@@ -114,8 +99,6 @@ typedef struct s_map
     int         lines;
     int         index;
     int         count;
-    int         sprite_cnt;
-    int         sprite_index;
     int         pos_cnt;
     int         pos_index;
     float       p_pos[2];
@@ -175,9 +158,17 @@ typedef struct s_ray
     float   step;
     float   tex_pos;
     float   z_buffer[WIDTH];
-    int     *sprite_order;
-    float   *sprite_dist;
 } t_ray;
+
+typedef struct s_keys {
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	right_arrow;
+	int	left_arrow;
+	int	shift;
+}	t_keys;
 
 typedef struct s_vars
 {
@@ -186,36 +177,12 @@ typedef struct s_vars
     t_player    g;
     t_img       img;
     t_tex       tex[5];
-    t_tex       ***sprite;
-    t_sprite    **sprites;
     void        *win;
     void        *mlx;
     int         door_hit[2];
     t_ray       *ray;
+    t_keys      keys;
 } t_vars;
-
-typedef struct s_sprite_util
-{
-    float	x;
-	float	y;
-	float	inv_det;
-	float	transform_x;
-	float	transform_y;
-	int		screen_x;
-	int		height;
-	int		draw_start_y;
-	int		draw_end_y;
-	int		width;
-	int		draw_start_x;
-	int		draw_end_x;
-	int		tex_x;
-	int		d;
-	int		tex_y;
-	int		color;
-	int		id;
-	int		frame;
-}   t_sprite_util;
-
 
 // CUB3D
 int     main (int argc, char **argv);
@@ -231,16 +198,21 @@ int read_color(t_map **map, int i);
 void    vertical_player_move(int keycode, t_vars *var, float speed);
 void    horizontal_player_move(int keycode, t_vars *var, float speed);
 void    change_vision_player(int keycode, t_vars *var, float speed);
-int     handle_keypress(int keycode, t_vars *var);
+int     key_press_hook(int keycode, t_vars *vars);
+int     key_relase_hook(int keycode, t_vars *vars);
+void	handle_keypress(t_vars *var);
 
 
 // DRAW
+void    set_ray_properties(t_vars *vars, t_ray *ray);
+void    set_ray_delta_dist(t_ray *ray);
 void    init_ray(t_vars *var, t_ray *ray, int x);
 void	init_step_and_sidedist(t_vars *var, t_ray *ray);
 int     get_pixel_color(t_img *img, int x, int y);
 void	img_pixel_put(t_img *img, int x, int y, int color);
 void	img_paste_pixel(t_img *img, int x, int y, int pixel);
-void    check_colision_wall(t_vars *var, t_ray *ray);
+void    check_collision_wall(t_vars *var, t_ray *ray);
+void    detect_next_collision(t_ray *ray);
 void    dda(t_vars *var, t_ray *ray);
 void    calculate_screen_line(t_ray *ray);
 void    draw_vertical_line(t_vars *var, t_ray *ray, int w);
@@ -252,13 +224,16 @@ void    draw(t_vars *var);
 // ERROR
 int     print_error(char *str, char *color, int value_return);
 void    print_error_exit(char *str, char *color, int exit_code);
+void	perror_exit(const char *s);
+int     perror_ret(const char *s, int ret_code);
+int     error_ret(const char *s, int ret_code);
 
 
 // FREEDOM_SINGS
 void    free_split(char **splited);
 void    free_map(t_map *map);
 void    free_struct_var(t_vars *var);
-int     free_struct_map(t_map *map, int back);
+int     free_with_exit(t_map *map, int back);
 void    free_all(t_vars *var);
 
 
@@ -293,9 +268,13 @@ int     load_texture(t_vars *var, t_tex *tex, char *img_path);
 int     init_texture(t_vars *var);
 int     open_texture(t_map *map);
 void	set_texture_id(t_ray *ray);
+void    calculate_wall_coordinate(t_vars *vars, t_ray *ray);
+void    calculate_texture_coordinate(t_vars *vars, t_ray *ray);
 void    calculate_texture_data(t_vars *var, t_ray *ray);
-int     get_texture_WE_EA(t_map **map, int i);
-int     get_texture_NO_SO(t_map **map, int i);
+int     valid_map(char *direction);
+void	get_texture(t_map *map, int i);
+// int     get_texture_WE_EA(t_map **map, int i);
+// int     get_texture_NO_SO(t_map **map, int i);
 int     parse_texture(t_map *map);
 
 
@@ -317,6 +296,8 @@ int     is_valid_direction(t_map *map);
 int     above_and_below(t_map **map, int i, int j, int x);
 int     check_surroundings(t_map **map, int i, int j);
 int     last_map_check(t_map **map);
+void    skip_empty_lines(t_map **map);
+void    check_width(t_map **map);
 
 
 #endif
