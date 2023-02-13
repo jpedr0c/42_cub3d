@@ -28,25 +28,25 @@ int start_dir_player(t_vars *var)
 {
     if (var->map->start_orientation == 'N')
     {
-        set_dir(&var->g, 0, -1);
-        set_plane(&var->g, -0.66, 0.0);
+        set_dir(&var->p, 0, -1);
+        set_plane(&var->p, -0.66, 0.0);
     }
     else if (var->map->start_orientation == 'S')
     {
-        set_dir(&var->g, 0, 1);
-        set_plane(&var->g, 0.66, 0.0);
+        set_dir(&var->p, 0, 1);
+        set_plane(&var->p, 0.66, 0.0);
     }
     else if (var->map->start_orientation == 'W')
     {
-        set_dir(&var->g, -1, 0);
-        set_plane(&var->g, 0.0, 0.66);
+        set_dir(&var->p, -1, 0);
+        set_plane(&var->p, 0.0, 0.66);
     }
     else if (var->map->start_orientation == 'E')
     {
-        set_dir(&var->g, 1, 0);
-        set_plane(&var->g, 0.0, -0.66);
+        set_dir(&var->p, 1, 0);
+        set_plane(&var->p, 0.0, -0.66);
     }
-    var->g.pos_x = (float)var->map->p_pos[0] + 0.5;
-    var->g.pos_y = (float)var->map->p_pos[1] + 0.5;
-    return (0);
+    var->p.pos_x = (float)var->map->p_pos[0] + 0.5;
+    var->p.pos_y = (float)var->map->p_pos[1] + 0.5;
+    return (1);
 }

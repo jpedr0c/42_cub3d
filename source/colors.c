@@ -17,7 +17,7 @@ int	create_rgba(int r, int g, int b, int a)
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-int process_colors(t_map **map, int i, char **ptr)
+int process_colour(t_map **map, int i, char **ptr)
 {
     int tmp[3];
 
@@ -33,7 +33,7 @@ int process_colors(t_map **map, int i, char **ptr)
     if (ft_strncmp((*map)->buffer[i], "F", 1) == 0)
     {
         if ((*map)->frgb != 0)
-            return (print_error("Duplicate Colors\n", REDN, 1));
+            return (print_error("Duplicate Colors\n", REDN, 0));
         (*map)->frgb = create_rgba(tmp[0], tmp[1], tmp[2], 0);
     }
     else
@@ -42,7 +42,7 @@ int process_colors(t_map **map, int i, char **ptr)
             return (print_error("Duplicate Colors\n", REDN, 1));
         (*map)->crgb = create_rgba(tmp[0], tmp[1], tmp[2], 0);
     }
-    return (0);
+    return (1);
 }
 
 int	read_colour(t_map **map, int i)
@@ -57,13 +57,13 @@ int	read_colour(t_map **map, int i)
 		split = ft_split(ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1), ',');
 		free(aux);
 		if (process_colour(map, i, split) == 1)
-			return (error_ret("Error\nInvalid Colour\n", 1));
+			return (error_ret("Error\nInvalid Colour\n", 0));
 	}
 	else
 		return (1);
 	if (split)
 		free_split(split);
-	return (0);
+	return (1);
 }
 
 // Função refatorada

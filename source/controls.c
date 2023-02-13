@@ -17,9 +17,9 @@ void	vertical_player_move(int keycode, t_vars *var, float speed)
 	t_player		*p;
 	char	**m;
 
-	p = &vars->p;
-	m = vars->map->map;
-	if (vars->keys.shift == 1)
+	p = &var->p;
+	m = var->map->map;
+	if (var->keys.shift == 1)
 		speed *= (float)2.0;
 	if (keycode == KEY_W)
 	{
@@ -42,9 +42,9 @@ void	horizontal_player_move(int keycode, t_vars *var, float speed)
 	t_player		*p;
 	char	**m;
 
-	p = &vars->p;
-	m = vars->map->map;
-	if (vars->keys.shift == 1)
+	p = &var->p;
+	m = var->map->map;
+	if (var->keys.shift == 1)
 		speed *= (float)2.0;
 	if (keycode == KEY_D)
 	{
@@ -68,7 +68,7 @@ void	change_vision_player(int keycode, t_vars *var, float speed)
 	float	old_dir_x;
 	float	old_plane_x;
 
-	p = &vars->p;
+	p = &var->p;
 	if (keycode == ARROW_LEFT)
 	{
 		old_dir_x = p->dir_x;
@@ -89,67 +89,67 @@ void	change_vision_player(int keycode, t_vars *var, float speed)
 	}
 }
 
-int	key_press_hook(int keycode, t_vars *vars)
+int	key_press_hook(int keycode, t_vars *var)
 {
 	if (keycode == KEY_ESC)
-		close_win(vars);
+		close_window(var);
 	else if (keycode == KEY_W)
-		vars->keys.w = 1;
+		var->keys.w = 1;
 	else if (keycode == KEY_A)
-		vars->keys.a = 1;
+		var->keys.a = 1;
 	else if (keycode == KEY_S)
-		vars->keys.s = 1;
+		var->keys.s = 1;
 	else if (keycode == KEY_D)
-		vars->keys.d = 1;
-	else if (keycode == KEY_RIGHT)
-		vars->keys.right_arrow = 1;
-	else if (keycode == KEY_LEFT)
-		vars->keys.left_arrow = 1;
+		var->keys.d = 1;
+	else if (keycode == ARROW_RIGHT)
+		var->keys.right_arrow = 1;
+	else if (keycode == ARROW_LEFT)
+		var->keys.left_arrow = 1;
 	else if (keycode == KEY_SHIFT)
-		vars->keys.shift = 1;
-	return (0);
+		var->keys.shift = 1;
+	return (1);
 }
 
-int	key_relase_hook(int keycode, t_vars *vars)
+int	key_release_hook(int keycode, t_vars *var)
 {
 	if (keycode == KEY_W)
-		vars->keys.w = 0;
+		var->keys.w = 0;
 	else if (keycode == KEY_A)
-		vars->keys.a = 0;
+		var->keys.a = 0;
 	else if (keycode == KEY_S)
-		vars->keys.s = 0;
+		var->keys.s = 0;
 	else if (keycode == KEY_D)
-		vars->keys.d = 0;
-	else if (keycode == KEY_RIGHT)
-		vars->keys.right_arrow = 0;
-	else if (keycode == KEY_LEFT)
-		vars->keys.left_arrow = 0;
+		var->keys.d = 0;
+	else if (keycode ==	ARROW_RIGHT)
+		var->keys.right_arrow = 0;
+	else if (keycode == ARROW_LEFT)
+		var->keys.left_arrow = 0;
 	else if (keycode == KEY_SHIFT)
-		vars->keys.shift = 0;
-	return (0);
+		var->keys.shift = 0;
+	return (1);
 }
 
 void	handle_keypress(t_vars *var)
 {
-	if (vars->keys.w != vars->keys.s)
+	if (var->keys.w != var->keys.s)
 	{
-		if (vars->keys.w == 1)
-			vertical_player_move(KEY_W, vars, 0.05);
-		else if (vars->keys.s == 1)
-			vertical_player_move(KEY_S, vars, 0.05);
+		if (var->keys.w == 1)
+			vertical_player_move(KEY_W, var, 0.05);
+		else if (var->keys.s == 1)
+			vertical_player_move(KEY_S, var, 0.05);
 	}
-	if (vars->keys.a != vars->keys.d)
+	if (var->keys.a != var->keys.d)
 	{
-		if (vars->keys.a == 1)
-			horizontal_player_move(KEY_A, vars, 0.05);
-		else if (vars->keys.d == 1)
-			horizontal_player_move(KEY_D, vars, 0.05);
+		if (var->keys.a == 1)
+			horizontal_player_move(KEY_A, var, 0.05);
+		else if (var->keys.d == 1)
+			horizontal_player_move(KEY_D, var, 0.05);
 	}
-	if (vars->keys.right_arrow != vars->keys.left_arrow)
+	if (var->keys.right_arrow != var->keys.left_arrow)
 	{
-		if (vars->keys.right_arrow == 1)
-			change_vision_player(KEY_RIGHT, vars, 0.05);
-		else if (vars->keys.left_arrow == 1)
-			change_vision_player(KEY_LEFT, vars, 0.05);
+		if (var->keys.right_arrow == 1)
+			change_vision_player(ARROW_RIGHT, var, 0.05);
+		else if (var->keys.left_arrow == 1)
+			change_vision_player(ARROW_LEFT, var, 0.05);
 	}
 }

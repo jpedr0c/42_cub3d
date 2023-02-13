@@ -15,14 +15,14 @@
 int	load_texture(t_vars *var, t_tex *tex, char *img_path)
 {
 	if (!img_path)
-		return (print_error("Path to image is null", REDN, 1));
+		return (print_error("Path to image is null", REDN, 0));
 	tex->img.img = mlx_xpm_file_to_image(var->mlx, img_path, &tex->w, &tex->h);
 	if (!tex->img.img)
-		return (print_error("Failed to convert xpm file to image", REDN, 1));
+		return (print_error("Failed to convert xpm file to image", REDN, 0));
 	tex->img.addr = mlx_get_data_addr(tex->img.img, &tex->img.bpp, &tex->img.line_len, &tex->img.endian);
 	if (!tex->img.addr)
-		return (print_error("Failed to get image address", REDN, 1));
-	return (0);
+		return (print_error("Failed to get image address", REDN, 0));
+	return (1);
 }
 
 int	init_texture(t_vars *var)
@@ -44,12 +44,12 @@ int	open_texture(t_map *map)
 	fd[2] = open(map->we, O_RDONLY);
 	fd[3] = open(map->ea, O_RDONLY);
 	if (fd[0] == -1 || fd[1] == -1 || fd[2] == -1 || fd[3] == -1)
-		return (1);
+		return (0);
 	close(fd[0]);
 	close(fd[1]);
 	close(fd[2]);
 	close(fd[3]);
-	return (0);
+	return (1);
 }
 
 void	set_texture_id(t_ray *ray)
@@ -100,75 +100,35 @@ void    calculate_texture_data(t_vars *var, t_ray *ray)
 int valid_map(char *direction)
 {
 	if (direction)
-		return (error_ret("Error\nDuplicated texture\n", 1));
-	return (0);
+		return (error_ret("Error\nDuplicated texture\n", 0));
+	return (1);
 }
 
 void	get_texture(t_map *map, int i)
 {
 	if (!ft_strncmp(map->buffer[i], "NO", 2))
 	{
-		if (!valid_map(map->no))
+		if (valid_map(map->no))
 			map->no = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (!ft_strncmp(map->buffer[i], "SO", 2))
 	{
-		if (!valid_map(map->so))
+		if (valid_map(map->so))
 			map->so = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (!ft_strncmp(map->buffer[i], "WE", 2))
 	{
-		if (!valid_map(map->we))
+		if (valid_map(map->we))
 			map->we = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (!ft_strncmp(map->buffer[i], "EA", 2))
 	{
-		if (!valid_map(map->ea))
+		if (valid_map(map->ea))
 			map->ea = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (read_colour(&map, i) == 1)
 		;
 }
-
-// int get_texture_WE_EA(t_map **map, int i)
-// {
-// 	if (!ft_strncmp((*map)->buffer[i], "WE", 2))
-// 	{
-// 		if ((*map)->we)
-// 			return (error_ret("Error\nDuplicated texture2\n", 1));
-// 		(*map)->we = ft_substr((*map)->buffer[i], 3, ft_strlen((*map)->buffer[i]));
-// 		return (0);
-// 	}
-// 	else if (!ft_strncmp((*map)->buffer[i], "EA", 2))
-// 	{
-// 		if ((*map)->ea)
-// 			return (error_ret("Error\nDuplicated texture1\n", 1));
-// 		(*map)->ea = ft_substr((*map)->buffer[i], 3, ft_strlen((*map)->buffer[i]));
-// 		return (0);
-// 	}
-// 	return (1);
-// }
-
-// int get_texture_NO_SO(t_map *map, int i)
-// {
-// 	if (!ft_strncmp((map)->buffer[i], "NO", 2))
-// 	{
-// 		if ((map)->no)
-// 			return (error_ret("Error\nDuplicated texture3\n", 1));
-// 		(map)->no = ft_substr((map)->buffer[i], 3, ft_strlen((map)->buffer[i]));
-// 	}
-// 	else if (!ft_strncmp((map)->buffer[i], "SO", 2))
-// 	{
-// 		if ((map)->so)
-// 			return (error_ret("Error\nDuplicated texture4\n", 1));
-// 		(map)->so = ft_substr((map)->buffer[i], 3, ft_strlen((map)->buffer[i]));
-// 	}
-// 	else if (read_texture2(&map, i) == 0)
-// 		return (0);
-// 	else if (read_colour(&map, i) == 1)
-// 		return (1);
-// 	return (0);
-// }
 
 int parse_texture(t_map *map)
 {
@@ -184,9 +144,9 @@ int parse_texture(t_map *map)
 			get_texture(map, i);
     }
     if (!map->no || !map->so || !map->we || !map->ea || !map->frgb || !map->crgb)
-        return (print_error("Missing texture\n", REDN, 1));
+        return (print_error("Missing texture\n", REDN, 0));
     if (open_texture(map) == 1)
-        return (print_error("Invalid texture\n", REDN, 1));
+        return (print_error("Invalid texture\n", REDN, 0));
     map->aux = i;
     return (i);
 }

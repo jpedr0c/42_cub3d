@@ -12,11 +12,19 @@
 
 #include "../include/cub3d.h"
 
-void set_ray_properties(t_vars *vars, t_ray *ray)
+static void set_cam_x(t_ray *ray, int x, int win_w)
 {
-	ray->cam_x = (2 * w) / (float)WIDTH - 1;
+    ray->cam_x = (2 * x) / (float)win_w - 1;
+}
+
+static void set_ray_directions(t_vars *vars, t_ray *ray)
+{
     ray->dir_x = vars->p.dir_x + vars->p.plane_x * ray->cam_x;
     ray->dir_y = vars->p.dir_y + vars->p.plane_y * ray->cam_x;
+}
+
+static void set_ray_map_pos(t_vars *vars, t_ray *ray)
+{
     ray->map_x = (int)vars->p.pos_x;
     ray->map_y = (int)vars->p.pos_y;
 }
@@ -32,10 +40,11 @@ void set_ray_delta_dist(t_ray *ray)
 	else
 		ray->delta_dist_y = fabs(1 / ray->dir_y);
 }
-
 void init_ray(t_vars *vars, t_ray *ray, int x)
 {
-	set_ray_properties(vars, ray);
+	set_cam_x(ray, x, WIDTH);
+    set_ray_directions(vars, ray);
+    set_ray_map_pos(vars, ray);
     set_ray_delta_dist(ray);
 	ray->hit = 0;
 }
@@ -45,23 +54,23 @@ void	init_step_and_sidedist(t_vars *var, t_ray *ray)
 	if (ray->dir_x < 0)
 	{
 		ray->step_x = -1;
-		ray->side_dist_x = (var->g.pos_x - ray->map_x) * ray->delta_dist_x;
+		ray->side_dist_x = (var->p.pos_x - ray->map_x) * ray->delta_dist_x;
 	}
 	else
 	{
 		ray->step_x = 1;
-		ray->side_dist_x = (ray->map_x + 1.0 - var->g.pos_x)
+		ray->side_dist_x = (ray->map_x + 1.0 - var->p.pos_x)
 			* ray->delta_dist_x;
 	}
 	if (ray->dir_y < 0)
 	{
 		ray->step_y = -1;
-		ray->side_dist_y = (var->g.pos_y - ray->map_y) * ray->delta_dist_y;
+		ray->side_dist_y = (var->p.pos_y - ray->map_y) * ray->delta_dist_y;
 	}
 	else
 	{
 		ray->step_y = 1;
-		ray->side_dist_y = (ray->map_y + 1.0 - var->g.pos_y)
+		ray->side_dist_y = (ray->map_y + 1.0 - var->p.pos_y)
 			* ray->delta_dist_x;
 	}
 }

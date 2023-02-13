@@ -45,20 +45,20 @@ int	line_handler(char *line, int index, t_map **map)
 	if (index == 0 || index == (*map)->height - 1)
 		return (verify_border(line));
 	else if (*line && (line[i] != '1' || line[ft_strlen(line) - 1] != '1'))
-		return (print_error("Map not closed by 1's\n", REDN, 1));
+		return (print_error("Map not closed by 1's\n", REDN, 0));
 	while (*line && line[++i] != '\n' && line[i])
 	{
 		if (!(line[i] == '0' || line[i] == '1' || line[i] == 'N'
 				|| line[i] == ' ' || line[i] == 'E'
 				|| line[i] == 'W' || line[i] == 'S'))
-			return (print_error("Invalid character on the map\n", REDN, 1));
+			return (print_error("Invalid character on the map\n", REDN, 0));
 		else
 		{
 			if (!is_valid_direction((*map)))
-				return (print_error("Too many player spawns\n", REDN, 1));
+				return (print_error("Too many player spawns\n", REDN, 0));
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int	is_valid_args(int argc, char **argv)
@@ -96,7 +96,7 @@ int	is_array_digit(char **s)
 
 int is_filled_map(const t_map *map)
 {
-    return (map->no || map->so || map->we || map->ea || map->frgb || map->crgb || map->pos_index != -1 || map->sprite_cnt != -1);
+    return (map->no || map->so || map->we || map->ea || map->frgb || map->crgb);
 }
 
 int	is_valid_map(t_map *map, char *str)
@@ -188,11 +188,11 @@ int last_map_check(t_map **map)
 			{
 				j = check_surroundings(map, i, j);
 				if (j == 0)
-					return (print_error("Map isn't closed by wall\n", REDN, 1));
+					return (print_error("Map isn't closed by wall\n", REDN, 0));
 			}
 		}
 	}
-	return (0);
+	return (1);
 }
 
 void skip_empty_lines(t_map **map)

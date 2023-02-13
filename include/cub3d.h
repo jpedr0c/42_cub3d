@@ -25,6 +25,7 @@
 # include <unistd.h>
 # include <math.h>
 
+# define NAME "cub3D"
 # define WIDTH 1280
 # define HEIGHT 720
 # define TEX 64
@@ -174,7 +175,7 @@ typedef struct s_vars
 {
     int         frame;
     t_map       *map;
-    t_player    g;
+    t_player    p;
     t_img       img;
     t_tex       tex[5];
     void        *win;
@@ -191,7 +192,7 @@ int     main (int argc, char **argv);
 // COLORS
 int	create_rgba(int r, int g, int b, int a);
 int process_colors(t_map **map, int i, char **ptr);
-int read_color(t_map **map, int i);
+int read_colour(t_map **map, int i);
 
 
 // CONTROLS
@@ -199,7 +200,7 @@ void    vertical_player_move(int keycode, t_vars *var, float speed);
 void    horizontal_player_move(int keycode, t_vars *var, float speed);
 void    change_vision_player(int keycode, t_vars *var, float speed);
 int     key_press_hook(int keycode, t_vars *vars);
-int     key_relase_hook(int keycode, t_vars *vars);
+int     key_release_hook(int keycode, t_vars *vars);
 void	handle_keypress(t_vars *var);
 
 

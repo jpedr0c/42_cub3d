@@ -62,35 +62,35 @@ int fill_buffer(char *file, int lines, t_map *map)
 	i = 0;
 	fd = open(file, O_RDONLY);
 	s = NULL;
-    if (fd < 0)
+    if (fd < 0) 
 		return 1;
     map->buffer = (char **)malloc(sizeof(char *) * (lines + 1));
     if (!map->buffer) 
 		return 1;
     while (i < lines)
     {
-        s = ft_get_next_line(fd);
+        s = get_next_line(fd);
         map->buffer[i++] = ft_substr(s, 0, ft_strlen(s) - 1);
         free(s);
     }
     map->buffer[i] = NULL;
     close(fd);
-    return 0;
+    return (1);
 }
 
 int	init_parser(t_map *map, char *str)
 {
-	if (map->lines == 0)
-		return (print_error("Empty map\n", REDN, 1));
+	if (!map->lines)
+		return (print_error("Empty map\n", REDN, 0));
 	if (!fill_buffer(str, map->lines, map))
-		return (print_error("Fatal error\n", REDN, 1));
+		return (print_error("Fatal error\n", REDN, 0));
 	if (parse_texture(map) < 0)
-		return (1);
-	if (parse_map(&map) != 0)
-		return (free_with_exit(map, 1));
-	if (last_map_check(&map) != 0)
-		return (free_with_exit(map, 1));
+		return (0);
+	if (!parse_map(&map))
+		return (free_with_exit(map, 0));
+	if (!last_map_check(&map))
+		return (free_with_exit(map, 0));
 	if (map->p_pos[0] == -1 || map->p_pos[1] == -1)
 		free_with_exit(map, 1);
-	return (0);
+	return (1);
 }
