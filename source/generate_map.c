@@ -7,7 +7,7 @@ int	read_map(t_map *map, char *str)
 
 	fd = open(str, O_RDONLY);
 	if (fd < 0)
-		return (perror_ret(str, 1));
+		return (print_error("It's not possible to open file", REDN, 1));
 	aux = get_next_line(fd);
 	while (aux)
 	{

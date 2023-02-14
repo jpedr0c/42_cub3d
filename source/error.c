@@ -1,17 +1,5 @@
 #include "../include/cub3d.h"
 
-/* return perror with custom error code */
-int	perror_ret(const char *s, int ret_code)
-{
-	if (s != NULL)
-		perror(s);
-	else if (NAME != NULL)
-		perror(NAME);
-	else
-		perror("error");
-	return (ret_code);
-}
-
 /* return custom error with custom error code */
 int	error_ret(const char *s, int ret_code)
 {
