@@ -3,9 +3,9 @@
 int	main(int argc, char *argv[])
 {
 	t_vars	*vars;
-
-	if (argc != 2)
-		return (error_ret("Usage: ./cub3D map.cub\n", 1));
+	
+	if (is_valid_args(argc, argv))
+		return (1);
 	vars = (t_vars *)malloc(sizeof(t_vars));
 	vars->map = (t_map *)malloc(sizeof(t_map));
 	ft_putstr_fd("Parsing...\n", STDOUT_FILENO);
