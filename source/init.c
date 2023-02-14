@@ -13,7 +13,7 @@ int	initialize_vars(t_vars *vars)
 	player_init(vars);
 	vars->ray = (t_ray *)malloc(sizeof(t_ray));
 	if (vars->ray == NULL)
-		perror_exit("malloc");
+		print_error_exit("Could not allocate\n", REDN, 1);
 	return (0);
 }
 
@@ -53,7 +53,7 @@ int	init_game(t_vars *vars)
 	if (initialize_vars(vars))
 	{
 		free_all(vars);
-		perror_exit("malloc");
+		print_error_exit("Unable to allocate variables", REDN, 1);
 	}
 	if (initialise_mlx(vars) != 0)
 		return (1);
