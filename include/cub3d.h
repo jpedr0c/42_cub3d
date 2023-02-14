@@ -213,7 +213,6 @@ void	calculate_texture_id(t_ray *ray);
 // ERROR
 int     print_error(char *str, char *color, int value_return);
 void    print_error_exit(char *str, char *color, int exit_code);
-int     error_ret(const char *s, int ret_code);
 
 
 // FREEDOM_SINGS

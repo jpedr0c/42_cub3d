@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   colors.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/14 17:07:13 by jocardos          #+#    #+#             */
+/*   Updated: 2023/02/14 17:07:14 by jocardos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	create_rgba(int r, int g, int b, int a)
@@ -22,13 +34,13 @@ int	process_colour(t_map **map, int i, char **sp)
 	if (ft_strncmp((*map)->buffer[i], "F", 1) == 0)
 	{
 		if ((*map)->frgb != 0)
-			return (error_ret("Error\nDuplicated Colours\n", 1));
+			return (print_error("Duplicated color", REDN, 1));
 		(*map)->frgb = create_rgba(0, tmp[0], tmp[1], tmp[2]);
 	}
 	else
 	{
 		if ((*map)->crgb != 0)
-			return (error_ret("Error\nDuplicated Colours\n", 1));
+			return (print_error("Duplicated color", REDN, 1));
 		(*map)->crgb = create_rgba(0, tmp[0], tmp[1], tmp[2]);
 	}
 	return (0);
@@ -47,7 +59,7 @@ int	read_colour(t_map **map, int i)
 					ft_strlen((*map)->buffer[i]) - 1), ',');
 		free(aux);
 		if (process_colour(map, i, split) == 1)
-			return (error_ret("Error\nInvalid Colour\n", 1));
+			return (print_error("Invalid color", REDN, 1));
 	}
 	else
 		return (1);
@@ -67,7 +79,7 @@ int	read_colour(t_map **map, int i)
 					// ft_strlen((*map)->buffer[i]) - 1), ',');
 // 		if (process_colour(map, i, ft_split(ft_substr((*map)->buffer[i], 2,
 							// ft_strlen((*map)->buffer[i]) - 1), ',')) == 1)
-// 			return (error_ret("Error\nInvalid Colour\n", 1));
+// 			return (print_error("Invalid color", REDN, 1));
 // 		free_split(split);
 // 	}
 // 	else

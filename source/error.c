@@ -1,20 +1,16 @@
-#include "../include/cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/14 17:06:58 by jocardos          #+#    #+#             */
+/*   Updated: 2023/02/14 17:07:00 by jocardos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/* return custom error with custom error code */
-int	error_ret(const char *s, int ret_code)
-{
-	if (NAME != NULL)
-	{
-		write(STDERR_FILENO, NAME, ft_strlen(NAME));
-	}
-	else
-		write(STDERR_FILENO, "error", 5);
-	write(STDERR_FILENO, ": ", 2);
-	if (s)
-		write(STDERR_FILENO, s, ft_strlen(s));
-	exit(ret_code);
-	return (ret_code);
-}
+#include "../include/cub3d.h"
 
 int	print_error(char *str, char *color, int value_return)
 {
@@ -23,6 +19,7 @@ int	print_error(char *str, char *color, int value_return)
 	reset_color = DEFAULT;
 	printf("%sError\n", color);
 	printf("%s%s\n", str, reset_color);
+	exit(value_return);
 	return (value_return);
 }
 
@@ -33,6 +30,5 @@ void	print_error_exit(char *str, char *color, int exit_code)
 	reset_color = DEFAULT;
 	printf("%sError\n", color);
 	printf("%s%s\n", str, reset_color);
-	if (exit_code == 1)
-		exit(1);
+	exit(exit_code);
 }

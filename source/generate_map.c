@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   generate_map.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/14 17:06:36 by jocardos          #+#    #+#             */
+/*   Updated: 2023/02/14 17:06:47 by jocardos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	read_map(t_map *map, char *str)
@@ -22,9 +34,9 @@ int	read_map(t_map *map, char *str)
 int	init_parser(t_map *map, char *str)
 {
 	if (map->lines == 0)
-		return (error_ret("Error\nempty map\n", 1));
+		return (print_error("Empty map", REDN, 1));
 	if (fill_buffer(str, map->lines, map) < 0)
-		return (error_ret("Error\nfatal error\n", 1));
+		return (print_error("Fatal error", REDN, 1));
 	if (parse_texture(map) < 0)
 		return (1);
 	if (parse_map(&map) != 0)

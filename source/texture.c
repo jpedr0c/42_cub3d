@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   texture.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/14 17:06:25 by jocardos          #+#    #+#             */
+/*   Updated: 2023/02/14 17:08:51 by jocardos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 void	calculate_texture_id(t_ray *ray)
@@ -21,15 +33,15 @@ void	calculate_texture_id(t_ray *ray)
 int	load_texture(t_vars *vars, t_tex *texture, char *xpm_path)
 {
 	if (!xpm_path)
-		return (error_ret("xpm path is null", 1));
+		return (print_error("Path to image is null", REDN, 1));
 	texture->img.img = mlx_xpm_file_to_image(vars->mlx, xpm_path, &texture->w,
 			&texture->h);
 	if (!texture->img.img)
-		return (error_ret("failed to convert xpm file to mlx image", 1));
+		return (print_error("Failed to convert xpm file to image", REDN, 1));
 	texture->img.addr = mlx_get_data_addr(texture->img.img, &texture->img.bpp,
 			&texture->img.line_len, &texture->img.endian);
 	if (!texture->img.addr)
-		return (error_ret("failed to get mlx image address", 1));
+		return (print_error("Failed to get image address", REDN, 1));
 	return (0);
 }
 
@@ -84,10 +96,9 @@ int	parse_texture(t_map *map)
 	}
 	if (!map->no || !map->so || !map->we || !map->ea || !map->frgb
 		|| !map->crgb)
-		return (error_ret("Error\nMissing data on the config file",
-							1));
+		return (print_error("Missing texture", REDN, 1));
 	if (open_texture(map) == 1)
-		return (-1);
+		return (print_error("Invalid texture", REDN, 1));
 	map->aux = i;
 	return (i);
 }

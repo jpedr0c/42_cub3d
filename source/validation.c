@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/14 17:06:19 by jocardos          #+#    #+#             */
+/*   Updated: 2023/02/14 17:08:51 by jocardos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	is_filled_map(const t_map *map)
@@ -9,7 +21,7 @@ int	is_filled_map(const t_map *map)
 int	valid_map(char *direction)
 {
 	if (direction)
-		return (error_ret("Error\nDuplicated texture3\n", 1));
+		return (print_error("Duplicated texture", REDN, 1));
 	return (0);
 }
 
@@ -30,9 +42,8 @@ int	verify_border(const char *line)
 	while (line[++i])
 	{
 		if (line[i] != '1' && line[i] != ' ')
-			return (error_ret("Error\nFirst or last"
-								"line is not filled by 1's\n",
-								1));
+			return (print_error("First or last line is not filled by 1's\n",
+				REDN, 1));
 	}
 	return (0);
 }
@@ -45,17 +56,17 @@ int	line_handler(char *line, int index, t_map **map)
 	if (index == 0 || index == (*map)->height - 1)
 		return (verify_border(line));
 	else if (*line && (line[i] != '1' || line[ft_strlen(line) - 1] != '1'))
-		return (error_ret("Error\nMap not closed by 1's\n", 1));
+		return (print_error("Map not closed by 1's\n", REDN, 1));
 	while (*line && line[++i] != '\n' && line[i] != '\0')
 	{
 		if (!(line[i] == '0' || line[i] == '1' || line[i] == 'N'
 				|| line[i] == ' ' || line[i] == 'E' || line[i] == 'W'
 				|| line[i] == 'S' || line[i] == 'C' || line[i] == 'O'))
-			return (error_ret("Error\nInvalid character on the map\n", 1));
+			return (print_error("Invalid character on the map\n", REDN, 1));
 		else
 		{
 			if (counter(line[i], map) != 0)
-				return (error_ret("Error\nToo many player spawns\n", 1));
+				return (print_error("Too many player spawns\n", REDN, 1));
 		}
 	}
 	return (0);
@@ -166,7 +177,7 @@ int	last_map_check(t_map **map)
 			{
 				j = check_surroundings(map, i, j);
 				if (j == -1)
-					return (error_ret("Error\nMap isn't closed by 1\n", 1));
+					return (print_error("Map isn't closed by wall\n", REDN, 1));
 			}
 		}
 	}
