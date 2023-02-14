@@ -192,22 +192,29 @@ void	handle_keypress(t_vars *var);
 
 
 // DRAW
+void	draw_square(t_vars *var);
+void    draw(t_vars *var);
+void    draw_vertical_line(t_vars *var, t_ray *ray, int x);
+void	calculate_step_and_side(t_vars *var, t_ray *ray);
+void	set_cam_x(t_ray *ray, int x, int win_w);
+void	set_ray_directions(t_vars *vars, t_ray *ray);
+void	set_ray_map_pos(t_vars *vars, t_ray *ray);
+void	set_ray_delta_dist(t_ray *ray);
 void    set_ray_properties(t_vars *vars, t_ray *ray);
-void    set_ray_delta_dist(t_ray *ray);
+void    calculate_delta_distances(t_ray *ray);
 void    init_ray(t_vars *var, t_ray *ray, int x);
-void	init_step_and_sidedist(t_vars *var, t_ray *ray);
 int     get_pixel_color(t_img *img, int x, int y);
 void	img_pixel_put(t_img *img, int x, int y, int color);
 void	img_paste_pixel(t_img *img, int x, int y, int pixel);
-int     check_collision_wall(t_vars *var, t_ray *ray);
 void    detect_next_collision(t_ray *ray);
+int     check_collision_wall(t_vars *var, t_ray *ray);
 void    dda(t_vars *var, t_ray *ray);
 void    calculate_screen_line(t_ray *ray);
-void    draw_vertical_line(t_vars *var, t_ray *ray, int w);
+void	calculate_wall_coordinate(t_vars *vars, t_ray *ray);
+void	calculate_texture_coordinate(t_vars *vars, t_ray *ray);
+void	calculate_tex_step_and_pos(t_vars *vars, t_ray *ray);
+void	calculate_texture_data(t_vars *vars, t_ray *ray);
 void	raycast_wall(t_vars *var);
-void	draw_square(t_vars *var);
-void    draw(t_vars *var);
-void	calculate_texture_id(t_ray *ray);
 
 
 // ERROR
@@ -251,13 +258,11 @@ int     start_dir_player(t_vars *var);
 
 
 // TEXTURE
+void	calculate_texture_id(t_ray *ray);
 int     load_texture(t_vars *var, t_tex *tex, char *img_path);
 int     init_texture(t_vars *var);
 int     open_texture(t_map *map);
 void	set_texture_id(t_ray *ray);
-void    calculate_wall_coordinate(t_vars *vars, t_ray *ray);
-void    calculate_texture_coordinate(t_vars *vars, t_ray *ray);
-void    calculate_texture_data(t_vars *var, t_ray *ray);
 int     valid_map(char *direction);
 void	get_texture(t_map *map, int i);
 int     parse_texture(t_map *map);

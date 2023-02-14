@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:36 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/14 17:06:47 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/14 18:03:43 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,6 @@ int	init_parser(t_map *map, char *str)
 	if (map->p_pos[0] == -1 || map->p_pos[1] == -1)
 		free_with_exit(map, 1);
 	return (0);
-}
-
-void	init_map(t_map *map)
-{
-	map->buffer = NULL;
-	map->no = NULL;
-	map->so = NULL;
-	map->we = NULL;
-	map->ea = NULL;
-	map->height = 0;
-	map->width = 0;
-	map->crgb = 0;
-	map->frgb = 0;
-	map->lines = 0;
-	map->count = 0;
-	map->p_pos[0] = -1;
-	map->p_pos[1] = -1;
 }
 
 void	fill_map(t_map **map)

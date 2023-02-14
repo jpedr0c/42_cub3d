@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:07:03 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/14 17:07:05 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/14 18:12:08 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	draw(t_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }
 
-void	draw_ver_line(t_vars *vars, int x, t_ray *ray)
+void	draw_vertical_line(t_vars *vars, t_ray *ray, int x)
 {
 	int		y;
 	int		color;
@@ -69,7 +69,7 @@ void	draw_ver_line(t_vars *vars, int x, t_ray *ray)
 	}
 }
 
-void	init_step_and_sidedist(t_vars *vars, t_ray *ray)
+void	calculate_step_and_side(t_vars *vars, t_ray *ray)
 {
 	if (ray->dir_x < 0)
 	{
@@ -93,44 +93,6 @@ void	init_step_and_sidedist(t_vars *vars, t_ray *ray)
 		ray->side_dist_y = (ray->map_y + 1.0 - vars->p.pos_y)
 			* ray->delta_dist_y;
 	}
-}
-
-void	set_cam_x(t_ray *ray, int x, int win_w)
-{
-	ray->cam_x = (2 * x) / (float)win_w - 1;
-}
-
-void	set_ray_directions(t_vars *vars, t_ray *ray)
-{
-	ray->dir_x = vars->p.dir_x + vars->p.plane_x * ray->cam_x;
-	ray->dir_y = vars->p.dir_y + vars->p.plane_y * ray->cam_x;
-}
-
-void	set_ray_map_pos(t_vars *vars, t_ray *ray)
-{
-	ray->map_x = (int)vars->p.pos_x;
-	ray->map_y = (int)vars->p.pos_y;
-}
-
-void	set_ray_delta_dist(t_ray *ray)
-{
-	if (ray->dir_x == 0)
-		ray->delta_dist_x = 1e30;
-	else
-		ray->delta_dist_x = fabs(1 / ray->dir_x);
-	if (ray->dir_y == 0)
-		ray->delta_dist_y = 1e30;
-	else
-		ray->delta_dist_y = fabs(1 / ray->dir_y);
-}
-
-void	init_ray(t_vars *vars, t_ray *ray, int x)
-{
-	set_cam_x(ray, x, WIDTH);
-	set_ray_directions(vars, ray);
-	set_ray_map_pos(vars, ray);
-	set_ray_delta_dist(ray);
-	ray->hit = 0;
 }
 
 int	get_pixel_color(t_img *img, int x, int y)
@@ -176,7 +138,8 @@ void	img_paste_pixel(t_img *img, int x, int y, int pixel)
 	*(unsigned int *)dst = pixel;
 }
 
-static void	update_side_distance(t_ray *ray)
+// Determina qual é a próxima parede que será atingida pelo raio de visão (ray) na simulação
+void	detect_next_collision(t_ray *ray)
 {
 	if (ray->side_dist_x < ray->side_dist_y)
 	{
@@ -192,7 +155,7 @@ static void	update_side_distance(t_ray *ray)
 	}
 }
 
-static int	is_wall_hit(t_vars *vars, t_ray *ray)
+int	check_collision_wall(t_vars *vars, t_ray *ray)
 {
 	return (vars->map->map[ray->map_y][ray->map_x] == WALL);
 }
@@ -201,8 +164,8 @@ void	dda(t_vars *vars, t_ray *ray)
 {
 	while (!ray->hit)
 	{
-		update_side_distance(ray);
-		ray->hit = is_wall_hit(vars, ray);
+		detect_next_collision(ray);
+		ray->hit = check_collision_wall(vars, ray);
 	}
 }
 
@@ -221,7 +184,7 @@ void	calculate_screen_line(t_ray *ray)
 		ray->draw_end = HEIGHT - 1;
 }
 
-static void	calculate_wall_x(t_vars *vars, t_ray *ray)
+void	calculate_wall_coordinate(t_vars *vars, t_ray *ray)
 {
 	if (ray->side == 0)
 		ray->wall_x = vars->p.pos_y + ray->perp_wall_dist * ray->dir_y;
@@ -230,7 +193,7 @@ static void	calculate_wall_x(t_vars *vars, t_ray *ray)
 	ray->wall_x -= floor(ray->wall_x);
 }
 
-static void	calculate_tex_x(t_vars *vars, t_ray *ray)
+void	calculate_texture_coordinate(t_vars *vars, t_ray *ray)
 {
 	ray->tex_x = (int)(ray->wall_x * TEX_W);
 	if ((ray->side == 0 && ray->dir_x > 0) ||
@@ -240,7 +203,7 @@ static void	calculate_tex_x(t_vars *vars, t_ray *ray)
 	}
 }
 
-static void	calculate_tex_step_and_pos(t_vars *vars, t_ray *ray)
+void	calculate_tex_step_and_pos(t_vars *vars, t_ray *ray)
 {
 	ray->step = vars->tex[ray->texture_id].h / (double)ray->line_height;
 	ray->tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2)
@@ -249,8 +212,8 @@ static void	calculate_tex_step_and_pos(t_vars *vars, t_ray *ray)
 
 void	calculate_texture_data(t_vars *vars, t_ray *ray)
 {
-	calculate_wall_x(vars, ray);
-	calculate_tex_x(vars, ray);
+	calculate_wall_coordinate(vars, ray);
+	calculate_texture_coordinate(vars, ray);
 	calculate_tex_step_and_pos(vars, ray);
 }
 
@@ -264,12 +227,12 @@ void	raycast_wall(t_vars *vars)
 	while (++x < WIDTH)
 	{
 		init_ray(vars, ray, x);
-		init_step_and_sidedist(vars, ray);
+		calculate_step_and_side(vars, ray);
 		dda(vars, ray);
 		calculate_screen_line(ray);
 		calculate_texture_id(ray);
 		calculate_texture_data(vars, ray);
-		draw_ver_line(vars, x, ray);
+		draw_vertical_line(vars, ray, x);
 		ray->z_buffer[x] = ray->perp_wall_dist;
 	}
 }

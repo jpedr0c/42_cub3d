@@ -56,7 +56,7 @@ WHITE		= \033[0;97m
 BG_GREEN	= \033[42;1;37m
 
 #Sources
-SRC_FILES	= cub3d colors controls draw error freedom_sings generate_map init texture utils player validation
+SRC_FILES	= cub3d colors controls draw error config freedom_sings generate_map init texture utils player validation init_raycasting
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
