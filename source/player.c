@@ -5,48 +5,48 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 18:54:18 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/01 19:23:52 by jocardos         ###   ########.fr       */
+/*   Created: 2023/02/14 12:35:57 by jocardos          #+#    #+#             */
+/*   Updated: 2023/02/14 12:36:20 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/cub3d.h"
+#include "../include/cub3d.h"
 
-void    set_dir(t_player *g, int dir_x, int dir_y)
+void	set_dir(t_player *p, int dir_x, int dir_y)
 {
-    g->dir_x = dir_x;
-    g->dir_y = dir_y;
+	p->dir_x = dir_x;
+	p->dir_y = dir_y;
 }
 
-void    set_plane(t_player *g, float plane_x, float plane_y)
+void	set_plane(t_player *p, float plane_x, float plane_y)
 {
-    g->plane_x = plane_x;
-    g->plane_y = plane_y;
+	p->plane_x = plane_x;
+	p->plane_y = plane_y;
 }
 
-int start_dir_player(t_vars *var)
+int	player_init(t_vars *vars)
 {
-    if (var->map->start_orientation == 'N')
-    {
-        set_dir(&var->p, 0, -1);
-        set_plane(&var->p, -0.66, 0.0);
-    }
-    else if (var->map->start_orientation == 'S')
-    {
-        set_dir(&var->p, 0, 1);
-        set_plane(&var->p, 0.66, 0.0);
-    }
-    else if (var->map->start_orientation == 'W')
-    {
-        set_dir(&var->p, -1, 0);
-        set_plane(&var->p, 0.0, 0.66);
-    }
-    else if (var->map->start_orientation == 'E')
-    {
-        set_dir(&var->p, 1, 0);
-        set_plane(&var->p, 0.0, -0.66);
-    }
-    var->p.pos_x = (float)var->map->p_pos[0] + 0.5;
-    var->p.pos_y = (float)var->map->p_pos[1] + 0.5;
-    return (1);
+	if (vars->map->start_orientation == 'N')
+	{
+		set_dir(&vars->p, 0, -1);
+		set_plane(&vars->p, -0.66, 0);
+	}
+	else if (vars->map->start_orientation == 'S')
+	{
+		set_dir(&vars->p, 0, 1);
+		set_plane(&vars->p, 0.66, 0.0);
+	}
+	else if (vars->map->start_orientation == 'W')
+	{
+		set_dir(&vars->p, -1, 0);
+		set_plane(&vars->p, 0.0, 0.66);
+	}
+	else if (vars->map->start_orientation == 'E')
+	{
+		set_dir(&vars->p, 1, 0);
+		set_plane(&vars->p, 0.0, -0.66);
+	}
+	vars->p.pos_x = (float)vars->map->p_pos[0] + 0.5;
+	vars->p.pos_y = (float)vars->map->p_pos[1] + 0.5;
+	return (0);
 }

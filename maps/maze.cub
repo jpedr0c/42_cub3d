@@ -1,8 +1,7 @@
 NO ./textures/wood.xpm
-SO ./textures/wall_4.xpm
-WE ./textures/wall_1.xpm
-EA ./textures/eagle.xpm
-
+SO ./textures/wood.xpm
+WE ./textures/BRICKS.xpm
+EA ./textures/BRICKS.xpm
 F 10,10,10
 C 40,40,40
 

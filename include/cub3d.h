@@ -26,8 +26,8 @@
 # include <math.h>
 
 # define NAME "cub3D"
-# define WIDTH 1280
-# define HEIGHT 720
+#  define WIDTH 1280
+#  define HEIGHT 720
 # define TEX 64
 # define FLOOR '0'
 # define WALL '1'
@@ -48,17 +48,12 @@ enum e_keycode
     KEY_ESC = 65307,
     KEY_MINUS = 45,
     KEY_PLUS = 61,
-    ARROW_UP = 65362,
-    ARROW_DOWN = 65364,
     ARROW_LEFT = 65361,
     ARROW_RIGHT = 65363,
     KEY_W = 119,
     KEY_S = 115,
     KEY_A = 97,
     KEY_D = 100,
-    KEY_P = 112,
-    KEY_E = 101,
-    KEY_C = 99,
     KEY_SHIFT = 65505
 };
 # else
@@ -67,17 +62,12 @@ enum e_keycode
     KEY_ESC = 53,
     KEY_MINUS = 27,
     KEY_PLUS = 24,
-    ARROW_UP = 126,
-    ARROW_DOWN = 125,
     ARROW_LEFT = 123,
     ARROW_RIGHT = 124,
     KEY_W = 13,
     KEY_S = 1,
     KEY_A = 0,
     KEY_D = 2,
-    KEY_P = 35,
-    KEY_E = 14,
-    KEY_C = 8,
     KEY_SHIFT = 257
 };
 # endif
@@ -87,7 +77,6 @@ typedef struct s_map
     char        start_orientation;
     char        **map;
     char        **buffer;
-    char        ***sprites;
     char        *no;
     char        *so;
     char        *we;
@@ -100,8 +89,6 @@ typedef struct s_map
     int         lines;
     int         index;
     int         count;
-    int         pos_cnt;
-    int         pos_index;
     float       p_pos[2];
 } t_map;
 
@@ -212,7 +199,7 @@ void	init_step_and_sidedist(t_vars *var, t_ray *ray);
 int     get_pixel_color(t_img *img, int x, int y);
 void	img_pixel_put(t_img *img, int x, int y, int color);
 void	img_paste_pixel(t_img *img, int x, int y, int pixel);
-void    check_collision_wall(t_vars *var, t_ray *ray);
+int     check_collision_wall(t_vars *var, t_ray *ray);
 void    detect_next_collision(t_ray *ray);
 void    dda(t_vars *var, t_ray *ray);
 void    calculate_screen_line(t_ray *ray);
@@ -220,6 +207,7 @@ void    draw_vertical_line(t_vars *var, t_ray *ray, int w);
 void	raycast_wall(t_vars *var);
 void	draw_square(t_vars *var);
 void    draw(t_vars *var);
+void	calculate_texture_id(t_ray *ray);
 
 
 // ERROR
@@ -250,8 +238,9 @@ int     close_window(t_vars *var);
 int     game_loop(t_vars *var);
 void    init_map(t_map *map);
 int     initialize_vars(t_vars *var);
-int     initialize_mlx(t_vars *var);
+int	    initialize_mlx(t_vars *vars);
 int     init_game(t_vars *var);
+int     player_init(t_vars *vars);
 
 
 // PARSER
@@ -274,8 +263,6 @@ void    calculate_texture_coordinate(t_vars *vars, t_ray *ray);
 void    calculate_texture_data(t_vars *var, t_ray *ray);
 int     valid_map(char *direction);
 void	get_texture(t_map *map, int i);
-// int     get_texture_WE_EA(t_map **map, int i);
-// int     get_texture_NO_SO(t_map **map, int i);
 int     parse_texture(t_map *map);
 
 
@@ -299,6 +286,7 @@ int     check_surroundings(t_map **map, int i, int j);
 int     last_map_check(t_map **map);
 void    skip_empty_lines(t_map **map);
 void    check_width(t_map **map);
-
-
+int     counter(char c, t_map **map);
+int     check_format(char *str);
+int     skip_spaces(char *line, int i);
 #endif

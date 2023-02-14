@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:47:18 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/13 11:29:12 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:27:15 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	vertical_player_move(int keycode, t_vars *var, float speed)
 {
-	t_player		*p;
-	char	**m;
+	t_player	*p;
+	char		**m;
 
 	p = &var->p;
 	m = var->map->map;
@@ -39,8 +39,8 @@ void	vertical_player_move(int keycode, t_vars *var, float speed)
 
 void	horizontal_player_move(int keycode, t_vars *var, float speed)
 {
-	t_player		*p;
-	char	**m;
+	t_player	*p;
+	char		**m;
 
 	p = &var->p;
 	m = var->map->map;
@@ -64,9 +64,9 @@ void	horizontal_player_move(int keycode, t_vars *var, float speed)
 
 void	change_vision_player(int keycode, t_vars *var, float speed)
 {
-	t_player		*p;
-	float	old_dir_x;
-	float	old_plane_x;
+	t_player	*p;
+	float		old_dir_x;
+	float		old_plane_x;
 
 	p = &var->p;
 	if (keycode == ARROW_LEFT)
@@ -107,7 +107,7 @@ int	key_press_hook(int keycode, t_vars *var)
 		var->keys.left_arrow = 1;
 	else if (keycode == KEY_SHIFT)
 		var->keys.shift = 1;
-	return (1);
+	return (0);
 }
 
 int	key_release_hook(int keycode, t_vars *var)
@@ -120,13 +120,13 @@ int	key_release_hook(int keycode, t_vars *var)
 		var->keys.s = 0;
 	else if (keycode == KEY_D)
 		var->keys.d = 0;
-	else if (keycode ==	ARROW_RIGHT)
+	else if (keycode == ARROW_RIGHT)
 		var->keys.right_arrow = 0;
 	else if (keycode == ARROW_LEFT)
 		var->keys.left_arrow = 0;
 	else if (keycode == KEY_SHIFT)
 		var->keys.shift = 0;
-	return (1);
+	return (0);
 }
 
 void	handle_keypress(t_vars *var)

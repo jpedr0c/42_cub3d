@@ -1,98 +1,67 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+        
-	+:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+      
-	+#+        */
-/*                                                +#+#+#+#+#+  
-	+#+           */
-/*   Created: 2023/01/27 13:38:15 by jocardos          #+#    #+#             */
-/*   Updated: 2023/01/27 13:38:15 by jocardos         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
-int	close_window(t_vars *var)
+int	initialize_vars(t_vars *vars)
 {
-	free_all(var);
-	print_message("Quit\n", YELLOWN);
-	exit(0);
+	vars->frame = -1;
+	vars->keys.w = 0;
+	vars->keys.s = 0;
+	vars->keys.a = 0;
+	vars->keys.d = 0;
+	vars->keys.right_arrow = 0;
+	vars->keys.left_arrow = 0;
+	vars->keys.shift = 0;
+	player_init(vars);
+	vars->ray = (t_ray *)malloc(sizeof(t_ray));
+	if (vars->ray == NULL)
+		perror_exit("malloc");
 	return (0);
 }
 
-int	game_loop(t_vars *var)
+int	initialise_mlx(t_vars *vars)
 {
-	if (++var->frame >= 60)
-		var->frame = 0;
-	handle_keypress(var);
-	draw(var);
-	return (0);
-}
-
-void	init_map(t_map *map)
-{
-	map->buffer = NULL;
-	map->no = NULL;
-	map->so = NULL;
-	map->we = NULL;
-	map->ea = NULL;
-	map->height = 0;
-	map->width = 0;
-	map->crgb = 0;
-	map->frgb = 0;
-	map->lines = 0;
-	map->count = 0;
-	map->p_pos[0] = -1;
-	map->p_pos[1] = -1;
-}
-
-int	initialize_vars(t_vars *var)
-{
-	var->frame = -1;
-	var->keys.w = 0;
-	var->keys.s = 0;
-	var->keys.a = 0;
-	var->keys.d = 0;
-	var->keys.right_arrow = 0;
-	var->keys.left_arrow = 0;
-	var->keys.shift = 0;
-	start_dir_player(var);
-	var->ray = (t_ray *)malloc(sizeof(t_ray));
-	if (!var->ray)
-		perror_exit("error\n");
-	return (0);
-}
-
-int	initialize_mlx(t_vars *var)
-{
-	var->mlx = mlx_init();
-	var->img.img = mlx_new_image(var->mlx, WIDTH, HEIGHT);
-	var->img.addr = mlx_get_data_addr(var->img.img,
-			&var->img.bpp, &var->img.line_len, &var->img.endian);
-	var->win = mlx_new_window(var->mlx, WIDTH, HEIGHT, "cub3D");
-	if (init_texture(var))
+	vars->mlx = mlx_init();
+	vars->img.img = mlx_new_image(vars->mlx, WIDTH, HEIGHT);
+	vars->img.addr = mlx_get_data_addr(vars->img.img,
+										&vars->img.bpp,
+										&vars->img.line_len,
+										&vars->img.endian);
+	vars->win = mlx_new_window(vars->mlx, WIDTH, HEIGHT, "cub3D");
+	if (init_texture(vars) != 0)
 		return (1);
 	return (0);
 }
 
-int	init_game(t_vars *var)
+int	close_window(t_vars *vars)
 {
-	if (initialize_vars(var))
+	free_all(vars);
+	ft_putstr_fd("Quit\n", STDOUT_FILENO);
+	exit(EXIT_SUCCESS);
+	return (0);
+}
+
+int	game_loop(t_vars *vars)
+{
+	if (++vars->frame >= 60)
+		vars->frame = 0;
+	handle_keypress(vars);
+	draw(vars);
+	return (0);
+}
+
+int	init_game(t_vars *vars)
+{
+	if (initialize_vars(vars))
 	{
-		free_all(var);
-		print_error_exit("Unable to allocate variables", REDN, 0);
+		free_all(vars);
+		perror_exit("malloc");
 	}
-	if (initialize_mlx(var))
+	if (initialise_mlx(vars) != 0)
 		return (1);
-	printf("ois\n");
-	mlx_hook(var->win, 2, (1L << 0), key_press_hook, var);
-	mlx_hook(var->win, 3, (1L << 1), key_release_hook, var);
-	mlx_hook(var->win, 17, (1L << 17), close_window, var);
-	mlx_loop_hook(var->mlx, game_loop, var);
-	mlx_loop(var->mlx);
-	free_all(var);
+	mlx_hook(vars->win, 2, (1L << 0), key_press_hook, vars);
+	mlx_hook(vars->win, 3, (1L << 1), key_release_hook, vars);
+	mlx_hook(vars->win, 17, (1L << 17), close_window, vars);
+	mlx_loop_hook(vars->mlx, game_loop, vars);
+	mlx_loop(vars->mlx);
+	free_all(vars);
 	return (0);
 }
