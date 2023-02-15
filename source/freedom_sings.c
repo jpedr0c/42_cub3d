@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freedom_sings.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:41 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:57:03 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/15 12:59:36 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_split(char **split)
 	split = NULL;
 }
 
-void free_map(t_map *map)
+void	free_map(t_map *map)
 {
 	free_split(map->map);
 	free_split(map->buffer);
