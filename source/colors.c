@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:07:13 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/14 17:07:14 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:09:28 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,56 @@ int	create_rgba(int r, int g, int b, int a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
+
+int	get_pixel_color(t_img *img, int x, int y)
+{
+	int		color;
+	char	*dst;
+
+	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	color = *(unsigned int *)dst;
+	return (color);
+}
+
+int	read_colour(t_map **map, int i)
+{
+	char	*aux;
+	char	**split;
+
+	if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
+		|| ft_strncmp((*map)->buffer[i], "C", 1) == 0)
+	{
+		aux = ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1);
+		split = ft_split(ft_substr((*map)->buffer[i], 2,
+					ft_strlen((*map)->buffer[i]) - 1), ',');
+		free(aux);
+		if (process_colour(map, i, split) == 1)
+			return (print_error("Invalid color", REDN, 1));
+	}
+	else
+		return (1);
+	if (split)
+		free_split(split);
+	return (0);
+}
+// static int	read_colour(t_map **map, int i)
+// {
+// 	char	**split;
+
+// 	if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
+// 		|| ft_strncmp((*map)->buffer[i], "C", 1) == 0)
+// 	{
+// 		split = ft_split(ft_substr((*map)->buffer[i], 2,
+					// ft_strlen((*map)->buffer[i]) - 1), ',');
+// 		if (process_colour(map, i, ft_split(ft_substr((*map)->buffer[i], 2,
+							// ft_strlen((*map)->buffer[i]) - 1), ',')) == 1)
+// 			return (print_error("Invalid color", REDN, 1));
+// 		free_split(split);
+// 	}
+// 	else
+// 		return (1);
+// 	return (0);
+// }
 
 int	process_colour(t_map **map, int i, char **sp)
 {
@@ -45,44 +95,3 @@ int	process_colour(t_map **map, int i, char **sp)
 	}
 	return (0);
 }
-
-int	read_colour(t_map **map, int i)
-{
-	char	*aux;
-	char	**split;
-
-	if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
-		|| ft_strncmp((*map)->buffer[i], "C", 1) == 0)
-	{
-		aux = ft_substr((*map)->buffer[i], 2, ft_strlen((*map)->buffer[i]) - 1);
-		split = ft_split(ft_substr((*map)->buffer[i], 2,
-					ft_strlen((*map)->buffer[i]) - 1), ',');
-		free(aux);
-		if (process_colour(map, i, split) == 1)
-			return (print_error("Invalid color", REDN, 1));
-	}
-	else
-		return (1);
-	if (split)
-		free_split(split);
-	return (0);
-}
-
-// static int	read_colour(t_map **map, int i)
-// {
-// 	char	**split;
-
-// 	if (ft_strncmp((*map)->buffer[i], "F", 1) == 0
-// 		|| ft_strncmp((*map)->buffer[i], "C", 1) == 0)
-// 	{
-// 		split = ft_split(ft_substr((*map)->buffer[i], 2,
-					// ft_strlen((*map)->buffer[i]) - 1), ',');
-// 		if (process_colour(map, i, ft_split(ft_substr((*map)->buffer[i], 2,
-							// ft_strlen((*map)->buffer[i]) - 1), ',')) == 1)
-// 			return (print_error("Invalid color", REDN, 1));
-// 		free_split(split);
-// 	}
-// 	else
-// 		return (1);
-// 	return (0);
-// }

@@ -3,32 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:25 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/14 17:08:51 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:31:29 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
-void	calculate_texture_id(t_ray *ray)
-{
-	if (ray->side == 0)
-	{
-		if (ray->dir_x < 0)
-			ray->texture_id = TEX_WE;
-		else
-			ray->texture_id = TEX_EA;
-	}
-	else
-	{
-		if (ray->dir_y < 0)
-			ray->texture_id = TEX_NO;
-		else
-			ray->texture_id = TEX_SO;
-	}
-}
 
 int	load_texture(t_vars *vars, t_tex *texture, char *xpm_path)
 {
@@ -59,22 +41,22 @@ void	get_texture(t_map *map, int i)
 {
 	if (!ft_strncmp(map->buffer[i], "NO", 2))
 	{
-		if (!valid_map(map->no))
+		if (!is_existing_texture(map->no))
 			map->no = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (!ft_strncmp(map->buffer[i], "SO", 2))
 	{
-		if (!valid_map(map->so))
+		if (!is_existing_texture(map->so))
 			map->so = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (!ft_strncmp(map->buffer[i], "WE", 2))
 	{
-		if (!valid_map(map->we))
+		if (!is_existing_texture(map->we))
 			map->we = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (!ft_strncmp(map->buffer[i], "EA", 2))
 	{
-		if (!valid_map(map->ea))
+		if (!is_existing_texture(map->ea))
 			map->ea = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
 	else if (read_colour(&map, i) == 1)
@@ -105,7 +87,7 @@ int	parse_texture(t_map *map)
 
 int	open_texture(t_map *map)
 {
-	int fd[5];
+	int	fd[4];
 
 	fd[0] = open(map->no, O_RDONLY);
 	fd[1] = open(map->so, O_RDONLY);
@@ -117,6 +99,5 @@ int	open_texture(t_map *map)
 	close(fd[1]);
 	close(fd[2]);
 	close(fd[3]);
-	close(fd[4]);
 	return (0);
 }

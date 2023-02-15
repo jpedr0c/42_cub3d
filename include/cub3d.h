@@ -6,7 +6,7 @@
 /*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 14:32:49 by jocardos          #+#    #+#             */
-/*   Updated: 2023/01/26 14:32:49 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:39:58 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@
 # include "../libraries/minilibx_linux/mlx.h"
 # include "colors.h"
 # include <fcntl.h>
-# include <stdlib.h>
+# include <math.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <math.h>
 
 # define NAME "cub3D"
-#  define WIDTH 1280
-#  define HEIGHT 720
+# define WIDTH 1280
+# define HEIGHT 720
 # define TEX 64
 # define FLOOR '0'
 # define WALL '1'
@@ -40,255 +40,247 @@
 #  define TEX_SO 1
 #  define TEX_WE 2
 #  define TEX_EA 3
-#endif
+# endif
 
 # ifdef __linux__
-enum e_keycode
+
+enum			e_keycode
 {
-    KEY_ESC = 65307,
-    KEY_MINUS = 45,
-    KEY_PLUS = 61,
-    ARROW_LEFT = 65361,
-    ARROW_RIGHT = 65363,
-    KEY_W = 119,
-    KEY_S = 115,
-    KEY_A = 97,
-    KEY_D = 100,
-    KEY_SHIFT = 65505
+	KEY_ESC = 65307,
+	KEY_MINUS = 45,
+	KEY_PLUS = 61,
+	ARROW_LEFT = 65361,
+	ARROW_RIGHT = 65363,
+	KEY_W = 119,
+	KEY_S = 115,
+	KEY_A = 97,
+	KEY_D = 100,
+	KEY_SHIFT = 65505
 };
 # else
-enum e_keycode
+
+enum			e_keycode
 {
-    KEY_ESC = 53,
-    KEY_MINUS = 27,
-    KEY_PLUS = 24,
-    ARROW_LEFT = 123,
-    ARROW_RIGHT = 124,
-    KEY_W = 13,
-    KEY_S = 1,
-    KEY_A = 0,
-    KEY_D = 2,
-    KEY_SHIFT = 257
+	KEY_ESC = 53,
+	KEY_MINUS = 27,
+	KEY_PLUS = 24,
+	ARROW_LEFT = 123,
+	ARROW_RIGHT = 124,
+	KEY_W = 13,
+	KEY_S = 1,
+	KEY_A = 0,
+	KEY_D = 2,
+	KEY_SHIFT = 257
 };
 # endif
 
 typedef struct s_map
 {
-    char        start_orientation;
-    char        **map;
-    char        **buffer;
-    char        *no;
-    char        *so;
-    char        *we;
-    char        *ea;
-    int         width;
-    int         height;
-    int         frgb;
-    int         crgb;
-    int         aux;
-    int         lines;
-    int         index;
-    int         count;
-    float       p_pos[2];
-} t_map;
+	char		start_orientation;
+	char		**map;
+	char		**buffer;
+	char		*no;
+	char		*so;
+	char		*we;
+	char		*ea;
+	int			width;
+	int			height;
+	int			frgb;
+	int			crgb;
+	int			aux;
+	int			lines;
+	int			index;
+	int			count;
+	float		p_pos[2];
+}				t_map;
 
 typedef struct s_img
 {
-    void    *img;
-    char    *addr;
-    int     bpp;
-    int     line_len;
-    int     endian;
-} t_img;
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			line_len;
+	int			endian;
+}				t_img;
 
 typedef struct s_tex
 {
-    t_img   img;
-    int     h;
-    int     w;
-} t_tex;
+	t_img		img;
+	int			h;
+	int			w;
+}				t_tex;
 
 typedef struct s_player
 {
-    float     pos_x;
-    float     pos_y;
-    float     dir_x;
-    float     dir_y;
-    float     plane_x;
-    float     plane_y;
-} t_player;
+	float		pos_x;
+	float		pos_y;
+	float		dir_x;
+	float		dir_y;
+	float		plane_x;
+	float		plane_y;
+}				t_player;
 
 typedef struct s_ray
 {
-    int     map_x;
-    int     map_y;
-    float   cam_x;
-    float   cam_y;
-    float   dir_x;
-    float   dir_y;
-    float   side_dist_x;
-    float   side_dist_y;
-    float   delta_dist_x;
-    float   delta_dist_y;
-    float   perp_wall_dist;
-    int     step_x;
-    int     step_y;
-    int     hit;
-    int     hit_door;
-    int     side;
-    int     line_height;
-    int     draw_start;
-    int     draw_end;
-    int     texture_id;
-    int     tex_x;
-    int     tex_y;
-    float   wall_x;
-    float   step;
-    float   tex_pos;
-    float   z_buffer[WIDTH];
-} t_ray;
+	int			map_x;
+	int			map_y;
+	float		cam_x;
+	float		cam_y;
+	float		dir_x;
+	float		dir_y;
+	float		side_dist_x;
+	float		side_dist_y;
+	float		delta_dist_x;
+	float		delta_dist_y;
+	float		perp_wall_dist;
+	int			step_x;
+	int			step_y;
+	int			hit;
+	int			hit_door;
+	int			side;
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
+	int			texture_id;
+	int			tex_x;
+	int			tex_y;
+	float		wall_x;
+	float		step;
+	float		tex_pos;
+	float		z_buffer[WIDTH];
+}				t_ray;
 
-typedef struct s_keys {
-	int	w;
-	int	a;
-	int	s;
-	int	d;
-	int	right_arrow;
-	int	left_arrow;
-	int	shift;
-}	t_keys;
+typedef struct s_keys
+{
+	int			w;
+	int			a;
+	int			s;
+	int			d;
+	int			right_arrow;
+	int			left_arrow;
+	int			shift;
+}				t_keys;
 
 typedef struct s_vars
 {
-    int         frame;
-    t_map       *map;
-    t_player    p;
-    t_img       img;
-    t_tex       tex[5];
-    void        *win;
-    void        *mlx;
-    int         door_hit[2];
-    t_ray       *ray;
-    t_keys      keys;
-} t_vars;
+	int			frame;
+	t_map		*map;
+	t_player	p;
+	t_img		img;
+	t_tex		tex[5];
+	void		*win;
+	void		*mlx;
+	int			door_hit[2];
+	t_ray		*ray;
+	t_keys		keys;
+}				t_vars;
 
 // CUB3D
-int     main (int argc, char **argv);
+int				main(int argc, char **argv);
 
+// CALC_TEXTURE
+void			calculate_screen_line(t_ray *ray);
+void			calculate_texture_id(t_ray *ray);
+void			calculate_wall_coordinate(t_vars *vars, t_ray *ray);
+void			calculate_texture_coordinate(t_vars *vars, t_ray *ray);
+void			calculate_texture_data(t_vars *vars, t_ray *ray);
 
 // COLORS
-int	create_rgba(int r, int g, int b, int a);
-int process_colors(t_map **map, int i, char **ptr);
-int read_colour(t_map **map, int i);
+int				get_pixel_color(t_img *img, int x, int y);
+int				create_rgba(int r, int g, int b, int a);
+int				read_colour(t_map **map, int i);
+int				process_colors(t_map **map, int i, char **ptr);
 
+// CONFIG
+int				initialize_vars(t_vars *var);
+void			init_map(t_map *map);
+int				initialize_mlx(t_vars *vars);
+int				fill_buffer(char *file, int lines, t_map *map);
 
 // CONTROLS
-void    vertical_player_move(int keycode, t_vars *var, float speed);
-void    horizontal_player_move(int keycode, t_vars *var, float speed);
-void    change_vision_player(int keycode, t_vars *var, float speed);
-int     key_press_hook(int keycode, t_vars *vars);
-int     key_release_hook(int keycode, t_vars *vars);
-void	handle_keypress(t_vars *var);
+void			vertical_player_move(int keycode, t_vars *var, float speed);
+void			horizontal_player_move(int keycode, t_vars *var, float speed);
+void			change_vision_player(int keycode, t_vars *var, float speed);
+void			handle_keypress(t_vars *var);
 
+// DDA
+void			calculate_step_and_side(t_vars *var, t_ray *ray);
+void			calculate_delta_distances(t_ray *ray);
+void			detect_next_collision(t_ray *ray);
+int				check_collision_wall(t_vars *var, t_ray *ray);
+void			dda(t_vars *var, t_ray *ray);
 
 // DRAW
-void	draw_square(t_vars *var);
-void    draw(t_vars *var);
-void    draw_vertical_line(t_vars *var, t_ray *ray, int x);
-void	calculate_step_and_side(t_vars *var, t_ray *ray);
-void	set_cam_x(t_ray *ray, int x, int win_w);
-void	set_ray_directions(t_vars *vars, t_ray *ray);
-void	set_ray_map_pos(t_vars *vars, t_ray *ray);
-void	set_ray_delta_dist(t_ray *ray);
-void    set_ray_properties(t_vars *vars, t_ray *ray);
-void    calculate_delta_distances(t_ray *ray);
-void    init_ray(t_vars *var, t_ray *ray, int x);
-int     get_pixel_color(t_img *img, int x, int y);
-void	img_pixel_put(t_img *img, int x, int y, int color);
-void	img_paste_pixel(t_img *img, int x, int y, int pixel);
-void    detect_next_collision(t_ray *ray);
-int     check_collision_wall(t_vars *var, t_ray *ray);
-void    dda(t_vars *var, t_ray *ray);
-void    calculate_screen_line(t_ray *ray);
-void	calculate_wall_coordinate(t_vars *vars, t_ray *ray);
-void	calculate_texture_coordinate(t_vars *vars, t_ray *ray);
-void	calculate_tex_step_and_pos(t_vars *vars, t_ray *ray);
-void	calculate_texture_data(t_vars *vars, t_ray *ray);
-void	raycast_wall(t_vars *var);
-
-
-// ERROR
-int     print_error(char *str, char *color, int value_return);
-void    print_error_exit(char *str, char *color, int exit_code);
-
+void			img_pixel_put(t_img *img, int x, int y, int color);
+void			img_paste_pixel(t_img *img, int x, int y, int pixel);
+void			draw_square(t_vars *var);
+void			draw(t_vars *var);
+void			draw_vertical_line(t_vars *var, t_ray *ray, int x);
+void			raycast_wall(t_vars *var);
 
 // FREEDOM_SINGS
-void    free_split(char **splited);
-void    free_map(t_map *map);
-void    free_struct_var(t_vars *var);
-int     free_with_exit(t_map *map, int back);
-void    free_all(t_vars *var);
-
+void			free_split(char **splited);
+void			free_all(t_vars *var);
+int				free_map(t_map *map, int back);
 
 // GENERATE_MAP
-int     read_map(t_map *map, char *str);
-void	fill_map(t_map **map);
-int     fill_buffer(char *file, int lines, t_map *map);
-int     init_parser(t_map *map, char *str);
+int				read_map(t_map *map, char *str);
+void			fill_map(t_map **map);
+void			check_width(t_map **map);
+int				parse_map(t_map **map);
+int				init_parser(t_map *map, char *str);
 
+// INIT_RAYCASTING
+void			set_cam_x(t_ray *ray, int x, int win_w);
+void			set_ray_directions(t_vars *vars, t_ray *ray);
+void			set_ray_map_pos(t_vars *vars, t_ray *ray);
+void			calculate_delta_distances(t_ray *ray);
+void			init_ray(t_vars *var, t_ray *ray, int x);
 
-// INIT
-int     close_window(t_vars *var);
-int     game_loop(t_vars *var);
-void    init_map(t_map *map);
-int     initialize_vars(t_vars *var);
-int	    initialize_mlx(t_vars *vars);
-int     init_game(t_vars *var);
-int     player_init(t_vars *vars);
+// GAME
+int				key_press_hook(int keycode, t_vars *vars);
+int				key_release_hook(int keycode, t_vars *vars);
+int				close_window(t_vars *var);
+int				game_loop(t_vars *var);
+int				init_game(t_vars *var);
 
+// MAP_UTILS
+int				is_existing_texture(char *direction);
+void			count_lines(t_map **map, int i);
+void			ignore_empty_lines(t_map **map);
+int				ignore_spaces(char *line, int i);
+int				counter(char c, t_map **map);
 
-// PARSER
-int     parse_map(t_map **map);
-
+// MAP_VALIDATIONS
+int				is_array_digit(char **s);
+int				is_filled_map(const t_map *map);
+int				verify_border(const char *line);
+int				line_handler(char *line, int index, t_map **map);
+int				last_map_check(t_map **map);
 
 // PLAYER
-void    set_dir(t_player *g, int dir_x, int dir_y);
-void    set_plane(t_player *g, float plane_x, float plane_y);
-int     start_dir_player(t_vars *var);
+void			set_dir(t_player *g, int dir_x, int dir_y);
+void			set_plane(t_player *g, float plane_x, float plane_y);
+int				start_dir_player(t_vars *var);
 
+// PRINTABLE
+int				print_error(char *str, char *color, int value_return);
+void			print_error_exit(char *str, char *color, int exit_code);
+void			print_message(char *str, char *color);
 
 // TEXTURE
-void	calculate_texture_id(t_ray *ray);
-int     load_texture(t_vars *var, t_tex *tex, char *img_path);
-int     init_texture(t_vars *var);
-int     open_texture(t_map *map);
-void	set_texture_id(t_ray *ray);
-int     valid_map(char *direction);
-void	get_texture(t_map *map, int i);
-int     parse_texture(t_map *map);
+int				load_texture(t_vars *var, t_tex *tex, char *img_path);
+int				init_texture(t_vars *var);
+void			get_texture(t_map *map, int i);
+int				parse_texture(t_map *map);
+int				open_texture(t_map *map);
 
-
-// UTILS
-int     ignore_spaces(char *line, int i);
-int     array_length(char **s);
-void    print_message(char *str, char *color);
-
+// UTILS - PRECISANDO DE ARQUIVO
 
 // VALIDATION
-void    count_lines(t_map **map, int i);
-int     verify_border(const char *line);
-int     line_handler(char *line, int index, t_map **map);
-int     is_valid_args(int argc, char **argv);
-int     is_array_digit(char **s);
-int     is_filled_map(const t_map *map);
-int     is_valid_map(t_map *map, char *str);
-int	    is_valid_direction(char c, t_map **map);
-int     above_and_below(t_map **map, int i, int j, int x);
-int     check_surroundings(t_map **map, int i, int j);
-int     last_map_check(t_map **map);
-void    skip_empty_lines(t_map **map);
-void    check_width(t_map **map);
-int     counter(char c, t_map **map);
-int     check_format(char *str);
-int     skip_spaces(char *line, int i);
+int				array_length(char **s);
+int				is_valid_args(int argc, char **argv);
+int				above_and_below(t_map **map, int i, int j, int x);
+int				check_surroundings(t_map **map, int i, int j);
+
 #endif

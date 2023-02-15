@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 12:35:57 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/14 12:36:20 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:57:55 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	set_plane(t_player *p, float plane_x, float plane_y)
 	p->plane_y = plane_y;
 }
 
-int	player_init(t_vars *vars)
+int	start_dir_player(t_vars *vars)
 {
 	if (vars->map->start_orientation == 'N')
 	{

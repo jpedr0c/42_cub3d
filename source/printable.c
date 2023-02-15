@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   printable.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/14 17:06:08 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/14 17:06:10 by jocardos         ###   ########.fr       */
+/*   Created: 2023/02/14 17:06:58 by jocardos          #+#    #+#             */
+/*   Updated: 2023/02/15 11:35:12 by jocardos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	ignore_spaces(char *line, int i)
+int	print_error(char *str, char *color, int value_return)
 {
-	if (!line)
-		return (0);
-	while (line[i] && line[i] == ' ')
-		i++;
-	return (i);
+	char	*reset_color;
+
+	reset_color = DEFAULT;
+	printf("%sError\n", color);
+	printf("%s%s\n", str, reset_color);
+	exit(value_return);
+	return (value_return);
 }
 
-int	array_length(char **s)
+void	print_error_exit(char *str, char *color, int exit_code)
 {
-	int	i;
+	char	*reset_color;
 
-	if (!s)
-		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	reset_color = DEFAULT;
+	printf("%sError\n", color);
+	printf("%s%s\n", str, reset_color);
+	exit(exit_code);
 }
 
 void	print_message(char *str, char *color)
