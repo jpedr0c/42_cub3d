@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   generate_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:36 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 11:53:18 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:55:36 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ int	init_parser(t_map *map, char *str)
 	if (parse_texture(map) < 0)
 		return (1);
 	if (parse_map(&map) != 0)
-		return (free_map(map, 1));
+		return (free_map_exit(map, 1));
 	if (last_map_check(&map) != 0)
-		return (free_map(map, 1));
+		return (free_map_exit(map, 1));
 	if (map->p_pos[0] == -1 || map->p_pos[1] == -1)
-		free_map(map, 1);
+		free_map_exit(map, 1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:07:13 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:09:28 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:52:07 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	get_pixel_color(t_img *img, int x, int y)
 	return (color);
 }
 
-int	read_colour(t_map **map, int i)
+int	read_colors(t_map **map, int i)
 {
 	char	*aux;
 	char	**split;
@@ -39,7 +39,7 @@ int	read_colour(t_map **map, int i)
 		split = ft_split(ft_substr((*map)->buffer[i], 2,
 					ft_strlen((*map)->buffer[i]) - 1), ',');
 		free(aux);
-		if (process_colour(map, i, split) == 1)
+		if (process_colors(map, i, split) == 1)
 			return (print_error("Invalid color", REDN, 1));
 	}
 	else
@@ -48,7 +48,7 @@ int	read_colour(t_map **map, int i)
 		free_split(split);
 	return (0);
 }
-// static int	read_colour(t_map **map, int i)
+// static int	read_colors(t_map **map, int i)
 // {
 // 	char	**split;
 
@@ -67,7 +67,7 @@ int	read_colour(t_map **map, int i)
 // 	return (0);
 // }
 
-int	process_colour(t_map **map, int i, char **sp)
+int	process_colors(t_map **map, int i, char **sp)
 {
 	int	tmp[3];
 

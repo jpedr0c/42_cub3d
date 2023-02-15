@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 14:32:49 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:39:58 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:57:19 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void			calculate_texture_data(t_vars *vars, t_ray *ray);
 // COLORS
 int				get_pixel_color(t_img *img, int x, int y);
 int				create_rgba(int r, int g, int b, int a);
-int				read_colour(t_map **map, int i);
+int				read_colors(t_map **map, int i);
 int				process_colors(t_map **map, int i, char **ptr);
 
 // CONFIG
@@ -220,8 +220,9 @@ void			raycast_wall(t_vars *var);
 
 // FREEDOM_SINGS
 void			free_split(char **splited);
+void			free_map(t_map *map);
 void			free_all(t_vars *var);
-int				free_map(t_map *map, int back);
+int				free_map_exit(t_map *map, int back);
 
 // GENERATE_MAP
 int				read_map(t_map *map, char *str);

@@ -1,9 +1,9 @@
-NO ./textures/dungeon_wall_1.xpm
-SO ./textures/dungeon_wall_1.xpm
-WE ./textures/dungeon_wall_2.xpm
-EA ./textures/dungeon_wall_2.xpm
-C 84,78,104
-F 32,60,86
+NO ./textures/mini1.xpm
+SO ./textures/mini1.xpm
+WE ./textures/mini2.xpm
+EA ./textures/mini2.xpm
+F 17,134,40
+C 0,180,253
 
           1111111111
           1000100001

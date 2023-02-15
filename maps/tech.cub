@@ -1,7 +1,7 @@
-NO ./textures/wood.xpm
-SO ./textures/wood.xpm
-WE ./textures/BRICKS.xpm
-EA ./textures/BRICKS.xpm
+NO ./textures/TECH1.xpm
+SO ./textures/TECH1.xpm
+WE ./textures/TECH2.xpm
+EA ./textures/TECH2.xpm
 F 10,10,10
 C 40,40,40
 

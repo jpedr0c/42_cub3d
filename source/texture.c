@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:25 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:31:29 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:52:07 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	get_texture(t_map *map, int i)
 		if (!is_existing_texture(map->ea))
 			map->ea = ft_substr(map->buffer[i], 3, ft_strlen(map->buffer[i]));
 	}
-	else if (read_colour(&map, i) == 1)
+	else if (read_colors(&map, i) == 1)
 		;
 }
 
