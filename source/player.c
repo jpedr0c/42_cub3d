@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 12:35:57 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 11:57:55 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,29 @@ void	set_plane(t_player *p, float plane_x, float plane_y)
 	p->plane_y = plane_y;
 }
 
-int	start_dir_player(t_vars *vars)
+int	start_dir_player(t_game *game)
 {
-	if (vars->map->start_orientation == 'N')
+	if (game->map->start_orientation == 'N')
 	{
-		set_dir(&vars->p, 0, -1);
-		set_plane(&vars->p, -0.66, 0);
+		set_dir(&game->p, 0, -1);
+		set_plane(&game->p, -0.66, 0);
 	}
-	else if (vars->map->start_orientation == 'S')
+	else if (game->map->start_orientation == 'S')
 	{
-		set_dir(&vars->p, 0, 1);
-		set_plane(&vars->p, 0.66, 0.0);
+		set_dir(&game->p, 0, 1);
+		set_plane(&game->p, 0.66, 0.0);
 	}
-	else if (vars->map->start_orientation == 'W')
+	else if (game->map->start_orientation == 'W')
 	{
-		set_dir(&vars->p, -1, 0);
-		set_plane(&vars->p, 0.0, 0.66);
+		set_dir(&game->p, -1, 0);
+		set_plane(&game->p, 0.0, 0.66);
 	}
-	else if (vars->map->start_orientation == 'E')
+	else if (game->map->start_orientation == 'E')
 	{
-		set_dir(&vars->p, 1, 0);
-		set_plane(&vars->p, 0.0, -0.66);
+		set_dir(&game->p, 1, 0);
+		set_plane(&game->p, 0.0, -0.66);
 	}
-	vars->p.pos_x = (float)vars->map->p_pos[0] + 0.5;
-	vars->p.pos_y = (float)vars->map->p_pos[1] + 0.5;
+	game->p.pos_x = (float)game->map->p_pos[0] + 0.5;
+	game->p.pos_y = (float)game->map->p_pos[1] + 0.5;
 	return (0);
 }

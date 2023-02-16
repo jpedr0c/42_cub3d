@@ -12,28 +12,28 @@
 
 #include "../include/cub3d.h"
 
-void	calculate_step_and_side(t_vars *vars, t_ray *ray)
+void	calculate_step_and_side(t_game *game, t_ray *ray)
 {
 	if (ray->dir_x < 0)
 	{
 		ray->step_x = -1;
-		ray->side_dist_x = (vars->p.pos_x - ray->map_x) * ray->delta_dist_x;
+		ray->side_dist_x = (game->p.pos_x - ray->map_x) * ray->delta_dist_x;
 	}
 	else
 	{
 		ray->step_x = 1;
-		ray->side_dist_x = (ray->map_x + 1.0 - vars->p.pos_x)
+		ray->side_dist_x = (ray->map_x + 1.0 - game->p.pos_x)
 			* ray->delta_dist_x;
 	}
 	if (ray->dir_y < 0)
 	{
 		ray->step_y = -1;
-		ray->side_dist_y = (vars->p.pos_y - ray->map_y) * ray->delta_dist_y;
+		ray->side_dist_y = (game->p.pos_y - ray->map_y) * ray->delta_dist_y;
 	}
 	else
 	{
 		ray->step_y = 1;
-		ray->side_dist_y = (ray->map_y + 1.0 - vars->p.pos_y)
+		ray->side_dist_y = (ray->map_y + 1.0 - game->p.pos_y)
 			* ray->delta_dist_y;
 	}
 }
@@ -56,16 +56,16 @@ void	detect_next_collision(t_ray *ray)
 	}
 }
 
-int	check_collision_wall(t_vars *vars, t_ray *ray)
+int	check_collision_wall(t_game *game, t_ray *ray)
 {
-	return (vars->map->map[ray->map_y][ray->map_x] == WALL);
+	return (game->map->map[ray->map_y][ray->map_x] == WALL);
 }
 
-void	dda(t_vars *vars, t_ray *ray)
+void	dda(t_game *game, t_ray *ray)
 {
 	while (!ray->hit)
 	{
 		detect_next_collision(ray);
-		ray->hit = check_collision_wall(vars, ray);
+		ray->hit = check_collision_wall(game, ray);
 	}
 }

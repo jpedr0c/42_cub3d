@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   config.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 18:02:24 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:39:30 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	initialize_vars(t_vars *vars)
+int	initialize_game(t_game *game)
 {
-	vars->frame = -1;
-	vars->keys.w = 0;
-	vars->keys.s = 0;
-	vars->keys.a = 0;
-	vars->keys.d = 0;
-	vars->keys.right_arrow = 0;
-	vars->keys.left_arrow = 0;
-	vars->keys.shift = 0;
-	start_dir_player(vars);
-	vars->ray = (t_ray *)malloc(sizeof(t_ray));
-	if (vars->ray == NULL)
+	game->frame = -1;
+	game->keys.w = 0;
+	game->keys.s = 0;
+	game->keys.a = 0;
+	game->keys.d = 0;
+	game->keys.right_arrow = 0;
+	game->keys.left_arrow = 0;
+	game->keys.shift = 0;
+	start_dir_player(game);
+	game->ray = (t_ray *)malloc(sizeof(t_ray));
+	if (game->ray == NULL)
 		print_error_exit("Could not allocate\n", REDN, 1);
 	return (0);
 }
@@ -46,16 +46,16 @@ void	init_map(t_map *map)
 	map->p_pos[1] = -1;
 }
 
-int	initialize_mlx(t_vars *vars)
+int	initialize_mlx(t_game *game)
 {
-	vars->mlx = mlx_init();
-	vars->img.img = mlx_new_image(vars->mlx, WIDTH, HEIGHT);
-	vars->img.addr = mlx_get_data_addr(vars->img.img,
-			&vars->img.bpp,
-			&vars->img.line_len,
-			&vars->img.endian);
-	vars->win = mlx_new_window(vars->mlx, WIDTH, HEIGHT, "cub3D");
-	if (init_texture(vars) != 0)
+	game->mlx = mlx_init();
+	game->img.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	game->img.addr = mlx_get_data_addr(game->img.img,
+			&game->img.bpp,
+			&game->img.line_len,
+			&game->img.endian);
+	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "cub3D");
+	if (init_texture(game) != 0)
 		return (1);
 	return (0);
 }

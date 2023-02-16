@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:32 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:05:50 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	key_press_hook(int keycode, t_vars *var)
+int	key_press_hook(int keycode, t_game *var)
 {
 	if (keycode == KEY_ESC)
 		close_window(var);
@@ -33,7 +33,7 @@ int	key_press_hook(int keycode, t_vars *var)
 	return (0);
 }
 
-int	key_release_hook(int keycode, t_vars *var)
+int	key_release_hook(int keycode, t_game *var)
 {
 	if (keycode == KEY_W)
 		var->keys.w = 0;
@@ -52,37 +52,37 @@ int	key_release_hook(int keycode, t_vars *var)
 	return (0);
 }
 
-int	close_window(t_vars *vars)
+int	close_window(t_game *game)
 {
-	free_all(vars);
+	free_all(game);
 	print_message("Good bye 👋", PURPLEI);
 	exit(0);
 	return (0);
 }
 
-int	game_loop(t_vars *vars)
+int	game_loop(t_game *game)
 {
-	if (++vars->frame >= 60)
-		vars->frame = 0;
-	handle_keypress(vars);
-	draw(vars);
+	if (++game->frame >= 60)
+		game->frame = 0;
+	handle_keypress(game);
+	draw(game);
 	return (0);
 }
 
-int	init_game(t_vars *vars)
+int	init_game(t_game *game)
 {
-	if (initialize_vars(vars))
+	if (initialize_game(game))
 	{
-		free_all(vars);
+		free_all(game);
 		print_error_exit("Unable to allocate variables", REDN, 1);
 	}
-	if (initialize_mlx(vars) != 0)
+	if (initialize_mlx(game) != 0)
 		return (1);
-	mlx_hook(vars->win, 2, (1L << 0), key_press_hook, vars);
-	mlx_hook(vars->win, 3, (1L << 1), key_release_hook, vars);
-	mlx_hook(vars->win, 17, (1L << 17), close_window, vars);
-	mlx_loop_hook(vars->mlx, game_loop, vars);
-	mlx_loop(vars->mlx);
-	free_all(vars);
+	mlx_hook(game->win, 2, (1L << 0), key_press_hook, game);
+	mlx_hook(game->win, 3, (1L << 1), key_release_hook, game);
+	mlx_hook(game->win, 17, (1L << 17), close_window, game);
+	mlx_loop_hook(game->mlx, game_loop, game);
+	mlx_loop(game->mlx);
+	free_all(game);
 	return (0);
 }

@@ -45,30 +45,30 @@ void	calculate_texture_id(t_ray *ray)
 	}
 }
 
-void	calculate_wall_coordinate(t_vars *vars, t_ray *ray)
+void	calculate_wall_coordinate(t_game *game, t_ray *ray)
 {
 	if (ray->side == 0)
-		ray->wall_x = vars->p.pos_y + ray->perp_wall_dist * ray->dir_y;
+		ray->wall_x = game->p.pos_y + ray->perp_wall_dist * ray->dir_y;
 	else
-		ray->wall_x = vars->p.pos_x + ray->perp_wall_dist * ray->dir_x;
+		ray->wall_x = game->p.pos_x + ray->perp_wall_dist * ray->dir_x;
 	ray->wall_x -= floor(ray->wall_x);
 }
 
-void	calculate_texture_coordinate(t_vars *vars, t_ray *ray)
+void	calculate_texture_coordinate(t_game *game, t_ray *ray)
 {
 	ray->tex_x = (int)(ray->wall_x * TEX_W);
 	if ((ray->side == 0 && ray->dir_x > 0)
 		|| (ray->side == 1 && ray->dir_y < 0))
 	{
-		ray->tex_x = vars->tex[ray->texture_id].w - ray->tex_x - 1;
+		ray->tex_x = game->tex[ray->texture_id].w - ray->tex_x - 1;
 	}
 }
 
-void	calculate_texture_data(t_vars *vars, t_ray *ray)
+void	calculate_texture_data(t_game *game, t_ray *ray)
 {
-	calculate_wall_coordinate(vars, ray);
-	calculate_texture_coordinate(vars, ray);
-	ray->step = vars->tex[ray->texture_id].h / (double)ray->line_height;
+	calculate_wall_coordinate(game, ray);
+	calculate_texture_coordinate(game, ray);
+	ray->step = game->tex[ray->texture_id].h / (double)ray->line_height;
 	ray->tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2)
 		* ray->step;
 }

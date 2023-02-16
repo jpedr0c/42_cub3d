@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freedom_sings.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:41 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:59:36 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,18 @@ void	free_map(t_map *map)
 	map = NULL;
 }
 
-void	free_all(t_vars *vars)
+void	free_all(t_game *game)
 {
-	mlx_destroy_image(vars->mlx, vars->img.img);
-	mlx_destroy_image(vars->mlx, vars->tex[TEX_NO].img.img);
-	mlx_destroy_image(vars->mlx, vars->tex[TEX_SO].img.img);
-	mlx_destroy_image(vars->mlx, vars->tex[TEX_WE].img.img);
-	mlx_destroy_image(vars->mlx, vars->tex[TEX_EA].img.img);
-	mlx_destroy_window(vars->mlx, vars->win);
-	free_map(vars->map);
-	free(vars->ray);
-	free(vars);
-	vars = NULL;
+	mlx_destroy_image(game->mlx, game->img.img);
+	mlx_destroy_image(game->mlx, game->tex[TEX_NO].img.img);
+	mlx_destroy_image(game->mlx, game->tex[TEX_SO].img.img);
+	mlx_destroy_image(game->mlx, game->tex[TEX_WE].img.img);
+	mlx_destroy_image(game->mlx, game->tex[TEX_EA].img.img);
+	mlx_destroy_window(game->mlx, game->win);
+	free_map(game->map);
+	free(game->ray);
+	free(game);
+	game = NULL;
 }
 
 int	free_map_exit(t_map *map, int ret)

@@ -61,7 +61,7 @@ int	line_handler(char *line, int index, t_map **map)
 	{
 		if (!(line[i] == '0' || line[i] == '1' || line[i] == 'N'
 				|| line[i] == ' ' || line[i] == 'E' || line[i] == 'W'
-				|| line[i] == 'S' || line[i] == 'C' || line[i] == 'O'))
+				|| line[i] == 'S'))
 			return (print_error("Invalid character on the map\n", REDN, 1));
 		else
 		{

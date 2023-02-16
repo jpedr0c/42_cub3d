@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 14:32:49 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:57:19 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/16 10:22:30 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define NAME "cub3D"
 # define WIDTH 1280
 # define HEIGHT 720
-# define TEX 64
 # define FLOOR '0'
 # define WALL '1'
 # if !defined TEX_W || !defined TEX_H
@@ -136,7 +135,6 @@ typedef struct s_ray
 	int			step_x;
 	int			step_y;
 	int			hit;
-	int			hit_door;
 	int			side;
 	int			line_height;
 	int			draw_start;
@@ -161,7 +159,7 @@ typedef struct s_keys
 	int			shift;
 }				t_keys;
 
-typedef struct s_vars
+typedef struct s_game
 {
 	int			frame;
 	t_map		*map;
@@ -170,10 +168,9 @@ typedef struct s_vars
 	t_tex		tex[5];
 	void		*win;
 	void		*mlx;
-	int			door_hit[2];
 	t_ray		*ray;
 	t_keys		keys;
-}				t_vars;
+}				t_game;
 
 // CUB3D
 int				main(int argc, char **argv);
@@ -181,9 +178,9 @@ int				main(int argc, char **argv);
 // CALC_TEXTURE
 void			calculate_screen_line(t_ray *ray);
 void			calculate_texture_id(t_ray *ray);
-void			calculate_wall_coordinate(t_vars *vars, t_ray *ray);
-void			calculate_texture_coordinate(t_vars *vars, t_ray *ray);
-void			calculate_texture_data(t_vars *vars, t_ray *ray);
+void			calculate_wall_coordinate(t_game *game, t_ray *ray);
+void			calculate_texture_coordinate(t_game *game, t_ray *ray);
+void			calculate_texture_data(t_game *game, t_ray *ray);
 
 // COLORS
 int				get_pixel_color(t_img *img, int x, int y);
@@ -192,36 +189,36 @@ int				read_colors(t_map **map, int i);
 int				process_colors(t_map **map, int i, char **ptr);
 
 // CONFIG
-int				initialize_vars(t_vars *var);
+int				initialize_game(t_game *var);
 void			init_map(t_map *map);
-int				initialize_mlx(t_vars *vars);
+int				initialize_mlx(t_game *game);
 int				fill_buffer(char *file, int lines, t_map *map);
 
 // CONTROLS
-void			vertical_player_move(int keycode, t_vars *var, float speed);
-void			horizontal_player_move(int keycode, t_vars *var, float speed);
-void			change_vision_player(int keycode, t_vars *var, float speed);
-void			handle_keypress(t_vars *var);
+void			vertical_player_move(int keycode, t_game *var, float speed);
+void			horizontal_player_move(int keycode, t_game *var, float speed);
+void			change_vision_player(int keycode, t_game *var, float speed);
+void			handle_keypress(t_game *var);
 
 // DDA
-void			calculate_step_and_side(t_vars *var, t_ray *ray);
+void			calculate_step_and_side(t_game *var, t_ray *ray);
 void			calculate_delta_distances(t_ray *ray);
 void			detect_next_collision(t_ray *ray);
-int				check_collision_wall(t_vars *var, t_ray *ray);
-void			dda(t_vars *var, t_ray *ray);
+int				check_collision_wall(t_game *var, t_ray *ray);
+void			dda(t_game *var, t_ray *ray);
 
 // DRAW
 void			img_pixel_put(t_img *img, int x, int y, int color);
 void			img_paste_pixel(t_img *img, int x, int y, int pixel);
-void			draw_square(t_vars *var);
-void			draw(t_vars *var);
-void			draw_vertical_line(t_vars *var, t_ray *ray, int x);
-void			raycast_wall(t_vars *var);
+void			draw_square(t_game *var);
+void			draw(t_game *var);
+void			draw_vertical_line(t_game *var, t_ray *ray, int x);
+void			raycast_wall(t_game *var);
 
 // FREEDOM_SINGS
 void			free_split(char **splited);
 void			free_map(t_map *map);
-void			free_all(t_vars *var);
+void			free_all(t_game *var);
 int				free_map_exit(t_map *map, int back);
 
 // GENERATE_MAP
@@ -233,17 +230,17 @@ int				init_parser(t_map *map, char *str);
 
 // INIT_RAYCASTING
 void			set_cam_x(t_ray *ray, int x, int win_w);
-void			set_ray_directions(t_vars *vars, t_ray *ray);
-void			set_ray_map_pos(t_vars *vars, t_ray *ray);
+void			set_ray_directions(t_game *game, t_ray *ray);
+void			set_ray_map_pos(t_game *game, t_ray *ray);
 void			calculate_delta_distances(t_ray *ray);
-void			init_ray(t_vars *var, t_ray *ray, int x);
+void			init_ray(t_game *var, t_ray *ray, int x);
 
 // GAME
-int				key_press_hook(int keycode, t_vars *vars);
-int				key_release_hook(int keycode, t_vars *vars);
-int				close_window(t_vars *var);
-int				game_loop(t_vars *var);
-int				init_game(t_vars *var);
+int				key_press_hook(int keycode, t_game *game);
+int				key_release_hook(int keycode, t_game *game);
+int				close_window(t_game *var);
+int				game_loop(t_game *var);
+int				init_game(t_game *var);
 
 // MAP_UTILS
 int				is_existing_texture(char *direction);
@@ -262,7 +259,7 @@ int				last_map_check(t_map **map);
 // PLAYER
 void			set_dir(t_player *g, int dir_x, int dir_y);
 void			set_plane(t_player *g, float plane_x, float plane_y);
-int				start_dir_player(t_vars *var);
+int				start_dir_player(t_game *var);
 
 // PRINTABLE
 int				print_error(char *str, char *color, int value_return);
@@ -270,8 +267,8 @@ void			print_error_exit(char *str, char *color, int exit_code);
 void			print_message(char *str, char *color);
 
 // TEXTURE
-int				load_texture(t_vars *var, t_tex *tex, char *img_path);
-int				init_texture(t_vars *var);
+int				load_texture(t_game *var, t_tex *tex, char *img_path);
+int				init_texture(t_game *var);
 void			get_texture(t_map *map, int i);
 int				parse_texture(t_map *map);
 int				open_texture(t_map *map);

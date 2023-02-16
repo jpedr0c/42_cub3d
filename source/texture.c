@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:25 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:52:07 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	load_texture(t_vars *vars, t_tex *texture, char *xpm_path)
+int	load_texture(t_game *game, t_tex *texture, char *xpm_path)
 {
 	if (!xpm_path)
 		return (print_error("Path to image is null", REDN, 1));
-	texture->img.img = mlx_xpm_file_to_image(vars->mlx, xpm_path, &texture->w,
+	texture->img.img = mlx_xpm_file_to_image(game->mlx, xpm_path, &texture->w,
 			&texture->h);
 	if (!texture->img.img)
 		return (print_error("Failed to convert xpm file to image", REDN, 1));
@@ -27,12 +27,12 @@ int	load_texture(t_vars *vars, t_tex *texture, char *xpm_path)
 	return (0);
 }
 
-int	init_texture(t_vars *vars)
+int	init_texture(t_game *game)
 {
-	if (!(load_texture(vars, &vars->tex[TEX_NO], vars->map->no)
-			|| load_texture(vars, &vars->tex[TEX_SO], vars->map->so)
-			|| load_texture(vars, &vars->tex[TEX_WE], vars->map->we)
-			|| load_texture(vars, &vars->tex[TEX_EA], vars->map->ea)))
+	if (!(load_texture(game, &game->tex[TEX_NO], game->map->no)
+			|| load_texture(game, &game->tex[TEX_SO], game->map->so)
+			|| load_texture(game, &game->tex[TEX_WE], game->map->we)
+			|| load_texture(game, &game->tex[TEX_EA], game->map->ea)))
 		return (0);
 	return (1);
 }

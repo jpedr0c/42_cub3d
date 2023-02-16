@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:47:18 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:05:33 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	vertical_player_move(int keycode, t_vars *var, float speed)
+void	vertical_player_move(int keycode, t_game *var, float speed)
 {
 	t_player	*p;
 	char		**m;
@@ -37,7 +37,7 @@ void	vertical_player_move(int keycode, t_vars *var, float speed)
 	}
 }
 
-void	horizontal_player_move(int keycode, t_vars *var, float speed)
+void	horizontal_player_move(int keycode, t_game *var, float speed)
 {
 	t_player	*p;
 	char		**m;
@@ -62,7 +62,7 @@ void	horizontal_player_move(int keycode, t_vars *var, float speed)
 	}
 }
 
-void	change_vision_player(int keycode, t_vars *var, float speed)
+void	change_vision_player(int keycode, t_game *var, float speed)
 {
 	t_player	*p;
 	float		old_dir_x;
@@ -89,7 +89,7 @@ void	change_vision_player(int keycode, t_vars *var, float speed)
 	}
 }
 
-void	handle_keypress(t_vars *var)
+void	handle_keypress(t_game *var)
 {
 	if (var->keys.w != var->keys.s)
 	{
