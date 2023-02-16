@@ -1,7 +1,8 @@
-NO ./textures/white.xpm
+NO ./textures/gray.xpm
 SO ./textures/red.xpm
 WE ./textures/green.xpm
 EA ./textures/blue.xpm
+
 C 28,28,28
 F 28,28,28
 

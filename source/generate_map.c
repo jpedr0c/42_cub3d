@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   generate_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rasilva <rasilva@student.42.rio>           +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:36 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:55:36 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/16 17:07:31 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	read_map(t_map *map, char *str)
 
 	fd = open(str, O_RDONLY);
 	if (fd < 0)
-		return (print_error("It's not possible to open file", REDN, 1));
+		return (print_error("Not possible! Archive not exist or invalid map",
+				REDN, 0));
 	aux = get_next_line(fd);
 	while (aux)
 	{
@@ -28,7 +29,7 @@ int	read_map(t_map *map, char *str)
 		aux = get_next_line(fd);
 	}
 	close(fd);
-	return (0);
+	return (1);
 }
 
 void	fill_map(t_map **map)
@@ -67,30 +68,33 @@ int	parse_map(t_map **map)
 		&& *(*map)->buffer[(*map)->aux])
 	{
 		if (line_handler((*map)->buffer[(*map)->aux], ++i, map))
-			return (1);
+			return (0);
 		check_width(map);
 		(*map)->aux++;
 	}
 	(*map)->map = (char **)ft_calloc((i + 2), sizeof(char *));
 	if (!(*map)->map)
-		return (1);
+		return (0);
 	fill_map(map);
-	return (0);
+	return (1);
 }
 
 int	init_parser(t_map *map, char *str)
 {
-	if (map->lines == 0)
-		return (print_error("Empty map", REDN, 1));
-	if (fill_buffer(str, map->lines, map) < 0)
-		return (print_error("Fatal error", REDN, 1));
+	if (!map->lines)
+		return (print_error("Empty map", REDN, 0));
+	if (!fill_buffer(str, map->lines, map))
+		return (print_error("Fatal error", REDN, 0));
 	if (parse_texture(map) < 0)
-		return (1);
-	if (parse_map(&map) != 0)
+		return (0);
+	if (!parse_map(&map))
 		return (free_map_exit(map, 1));
 	if (last_map_check(&map) != 0)
 		return (free_map_exit(map, 1));
 	if (map->p_pos[0] == -1 || map->p_pos[1] == -1)
+	{
+		print_message("No player spawn", REDN);
 		free_map_exit(map, 1);
-	return (0);
+	}
+	return (1);
 }

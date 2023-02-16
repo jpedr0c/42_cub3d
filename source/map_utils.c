@@ -31,9 +31,7 @@ void	count_lines(t_map **map, int index)
 void	ignore_empty_lines(t_map **map)
 {
 	while ((*map)->buffer[(*map)->aux] && !(*map)->buffer[(*map)->aux][0])
-	{
 		(*map)->aux++;
-	}
 	(*map)->index = (*map)->aux;
 }
 
@@ -46,7 +44,7 @@ int	ignore_spaces(char *line, int i)
 	return (i);
 }
 
-int	counter(char c, t_map **map)
+int	counter_player_position(char c, t_map **map)
 {
 	if (c == 'E' || c == 'S' || c == 'W' || c == 'N')
 		(*map)->count++;

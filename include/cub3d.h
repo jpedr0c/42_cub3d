@@ -6,7 +6,7 @@
 /*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 14:32:49 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/16 10:22:30 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/16 15:44:22 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ typedef struct s_ray
 	float		wall_x;
 	float		step;
 	float		tex_pos;
-	float		z_buffer[WIDTH];
 }				t_ray;
 
 typedef struct s_keys
@@ -247,7 +246,7 @@ int				is_existing_texture(char *direction);
 void			count_lines(t_map **map, int i);
 void			ignore_empty_lines(t_map **map);
 int				ignore_spaces(char *line, int i);
-int				counter(char c, t_map **map);
+int				counter_player_position(char c, t_map **map);
 
 // MAP_VALIDATIONS
 int				is_array_digit(char **s);
@@ -267,13 +266,11 @@ void			print_error_exit(char *str, char *color, int exit_code);
 void			print_message(char *str, char *color);
 
 // TEXTURE
+void			get_texture(t_map *map, int i);
 int				load_texture(t_game *var, t_tex *tex, char *img_path);
 int				init_texture(t_game *var);
-void			get_texture(t_map *map, int i);
 int				parse_texture(t_map *map);
 int				open_texture(t_map *map);
-
-// UTILS - PRECISANDO DE ARQUIVO
 
 // VALIDATION
 int				array_length(char **s);

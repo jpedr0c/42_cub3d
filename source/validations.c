@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validations.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jocardos <jocardos@student.42.rio>         +#+  +:+       +#+        */
+/*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:19 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/15 12:43:40 by jocardos         ###   ########.fr       */
+/*   Updated: 2023/02/16 12:17:46 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int	is_valid_args(int argc, char **argv)
 	if (argc != 2)
 	{
 		return (print_error("Invalid number of arguments. Use: ./cub3d map.cub",
-				REDN, 1));
+				REDN, 0));
 	}
 	else if (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 4) != 0)
 	{
 		return (print_error("Invalid file extension. Accepted is .cub",
-				REDN, 1));
+				REDN, 0));
 	}
-	return (0);
+	return (1);
 }
 
 int	above_and_below(t_map **map, int i, int j, int x)

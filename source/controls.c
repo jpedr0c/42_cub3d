@@ -6,62 +6,70 @@
 /*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:47:18 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/16 17:08:02 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
+/*checks which key is currently being pressed, and moves the player forward 
+or backward, based on the pressed key.
+The player's movement speed is affected by whether the shift key is pressed.*/
 void	vertical_player_move(int keycode, t_game *var, float speed)
 {
 	t_player	*p;
-	char		**m;
+	char		**map;
 
 	p = &var->p;
-	m = var->map->map;
+	map = var->map->map;
 	if (var->keys.shift == 1)
 		speed *= (float)2.0;
 	if (keycode == KEY_W)
 	{
-		if (m[(int)p->pos_y][(int)(p->pos_x + p->dir_x * speed)] == FLOOR)
+		if (map[(int)p->pos_y][(int)(p->pos_x + p->dir_x * speed)] == FLOOR)
 			p->pos_x += p->dir_x * speed;
-		if (m[(int)(p->pos_y + p->dir_y * speed)][(int)p->pos_x] == FLOOR)
+		if (map[(int)(p->pos_y + p->dir_y * speed)][(int)p->pos_x] == FLOOR)
 			p->pos_y += p->dir_y * speed;
 	}
 	else if (keycode == KEY_S)
 	{
-		if (m[(int)p->pos_y][(int)(p->pos_x - p->dir_x * speed)] == FLOOR)
+		if (map[(int)p->pos_y][(int)(p->pos_x - p->dir_x * speed)] == FLOOR)
 			p->pos_x -= p->dir_x * speed;
-		if (m[(int)(p->pos_y - p->dir_y * speed)][(int)p->pos_x] == FLOOR)
+		if (map[(int)(p->pos_y - p->dir_y * speed)][(int)p->pos_x] == FLOOR)
 			p->pos_y -= p->dir_y * speed;
 	}
 }
 
+/*checks which key is currently being pressed, and moves the player left or 
+right, based on the pressed key.
+The player's movement speed is affected by whether the shift key is pressed.*/
 void	horizontal_player_move(int keycode, t_game *var, float speed)
 {
 	t_player	*p;
-	char		**m;
+	char		**map;
 
 	p = &var->p;
-	m = var->map->map;
+	map = var->map->map;
 	if (var->keys.shift == 1)
 		speed *= (float)2.0;
 	if (keycode == KEY_D)
 	{
-		if (m[(int)p->pos_y][(int)(p->pos_x - p->plane_x * speed)] == FLOOR)
+		if (map[(int)p->pos_y][(int)(p->pos_x - p->plane_x * speed)] == FLOOR)
 			p->pos_x -= p->plane_x * speed;
-		if (m[(int)(p->pos_y - p->plane_y * speed)][(int)p->pos_x] == FLOOR)
+		if (map[(int)(p->pos_y - p->plane_y * speed)][(int)p->pos_x] == FLOOR)
 			p->pos_y -= p->plane_y * speed;
 	}
 	else if (keycode == KEY_A)
 	{
-		if (m[(int)p->pos_y][(int)(p->pos_x + p->plane_x * speed)] == FLOOR)
+		if (map[(int)p->pos_y][(int)(p->pos_x + p->plane_x * speed)] == FLOOR)
 			p->pos_x += p->plane_x * speed;
-		if (m[(int)(p->pos_y + p->plane_y * speed)][(int)p->pos_x] == FLOOR)
+		if (map[(int)(p->pos_y + p->plane_y * speed)][(int)p->pos_x] == FLOOR)
 			p->pos_y += p->plane_y * speed;
 	}
 }
 
+/*Rotates the player's direction and camera plane, based on whether the left 
+or right arrow key is pressed*/
 void	change_vision_player(int keycode, t_game *var, float speed)
 {
 	t_player	*p;
@@ -89,6 +97,9 @@ void	change_vision_player(int keycode, t_game *var, float speed)
 	}
 }
 
+/*Detects which keys are currently being pressed, and calls corresponding
+functions to move the player vertically or horizontally, or to change the
+player's viewing direction, based on the pressed keys*/
 void	handle_keypress(t_game *var)
 {
 	if (var->keys.w != var->keys.s)

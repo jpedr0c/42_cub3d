@@ -6,36 +6,11 @@
 /*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:06:25 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/16 17:07:06 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
-int	load_texture(t_game *game, t_tex *texture, char *xpm_path)
-{
-	if (!xpm_path)
-		return (print_error("Path to image is null", REDN, 1));
-	texture->img.img = mlx_xpm_file_to_image(game->mlx, xpm_path, &texture->w,
-			&texture->h);
-	if (!texture->img.img)
-		return (print_error("Failed to convert xpm file to image", REDN, 1));
-	texture->img.addr = mlx_get_data_addr(texture->img.img, &texture->img.bpp,
-			&texture->img.line_len, &texture->img.endian);
-	if (!texture->img.addr)
-		return (print_error("Failed to get image address", REDN, 1));
-	return (0);
-}
-
-int	init_texture(t_game *game)
-{
-	if (!(load_texture(game, &game->tex[TEX_NO], game->map->no)
-			|| load_texture(game, &game->tex[TEX_SO], game->map->so)
-			|| load_texture(game, &game->tex[TEX_WE], game->map->we)
-			|| load_texture(game, &game->tex[TEX_EA], game->map->ea)))
-		return (0);
-	return (1);
-}
 
 void	get_texture(t_map *map, int i)
 {
@@ -63,19 +38,38 @@ void	get_texture(t_map *map, int i)
 		;
 }
 
+int	load_texture(t_game *game, t_tex *tex, char *img_path)
+{
+	if (!img_path)
+		return (print_error("Path to image is null", REDN, 1));
+	tex->img.img = mlx_xpm_file_to_image(game->mlx, img_path, &tex->w,
+			&tex->h);
+	if (!tex->img.img)
+		return (print_error("Failed to convert xpm file to image", REDN, 1));
+	tex->img.addr = mlx_get_data_addr(tex->img.img, &tex->img.bpp,
+			&tex->img.line_len, &tex->img.endian);
+	if (!tex->img.addr)
+		return (print_error("Failed to get image address", REDN, 1));
+	return (0);
+}
+
+int	init_texture(t_game *game)
+{
+	if (!(load_texture(game, &game->tex[TEX_NO], game->map->no)
+			|| load_texture(game, &game->tex[TEX_SO], game->map->so)
+			|| load_texture(game, &game->tex[TEX_WE], game->map->we)
+			|| load_texture(game, &game->tex[TEX_EA], game->map->ea)))
+		return (0);
+	return (1);
+}
+
 int	parse_texture(t_map *map)
 {
 	int	i;
 
 	i = -1;
 	while (map->buffer[++i] && is_filled_map(map))
-	{
-		if ((ft_strncmp(map->buffer[i], "\n", 1) == 0
-				|| ft_strncmp(map->buffer[i], "\0", 1) == 0))
-			break ;
-		else
-			get_texture(map, i);
-	}
+		get_texture(map, i);
 	if (!map->no || !map->so || !map->we || !map->ea || !map->frgb
 		|| !map->crgb)
 		return (print_error("Missing texture", REDN, 1));

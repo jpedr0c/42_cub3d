@@ -6,7 +6,7 @@
 /*   By: rasilva <rasilva@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 18:02:24 by jocardos          #+#    #+#             */
-/*   Updated: 2023/02/16 10:20:34 by rasilva          ###   ########.fr       */
+/*   Updated: 2023/02/16 16:53:57 by rasilva          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ int	fill_buffer(char *file, int lines, t_map *map)
 	fd = open(file, O_RDONLY);
 	s = NULL;
 	if (fd < 0)
-		return (1);
+		return (0);
 	map->buffer = (char **)malloc(sizeof(char *) * (lines + 1));
 	if (!map->buffer)
-		return (1);
+		return (0);
 	while (i < lines)
 	{
 		s = get_next_line(fd);
@@ -82,5 +82,5 @@ int	fill_buffer(char *file, int lines, t_map *map)
 	}
 	map->buffer[i] = NULL;
 	close(fd);
-	return (0);
+	return (1);
 }

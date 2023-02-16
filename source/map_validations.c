@@ -65,7 +65,7 @@ int	line_handler(char *line, int index, t_map **map)
 			return (print_error("Invalid character on the map\n", REDN, 1));
 		else
 		{
-			if (counter(line[i], map))
+			if (counter_player_position(line[i], map))
 				return (print_error("Too many player spawns\n", REDN, 1));
 		}
 	}

@@ -12,6 +12,7 @@
 
 #include "../include/cub3d.h"
 
+/*Calculates steps and starting distance*/
 void	calculate_step_and_side(t_game *game, t_ray *ray)
 {
 	if (ray->dir_x < 0)
@@ -38,8 +39,8 @@ void	calculate_step_and_side(t_game *game, t_ray *ray)
 	}
 }
 
-// Determina qual é a próxima parede que será atingida 
-// pelo raio de visão (ray) na simulação
+/* Determine which wall will be hit next by the view radius (ray) in the 
+simulation*/
 void	detect_next_collision(t_ray *ray)
 {
 	if (ray->side_dist_x < ray->side_dist_y)
@@ -56,11 +57,14 @@ void	detect_next_collision(t_ray *ray)
 	}
 }
 
+/* Checks if it is a wall and returns true or false */
 int	check_collision_wall(t_game *game, t_ray *ray)
 {
 	return (game->map->map[ray->map_y][ray->map_x] == WALL);
 }
 
+/*Finds out which parts of the map our beam hits and stops the algorithm 
+when a wall is hit*/
 void	dda(t_game *game, t_ray *ray)
 {
 	while (!ray->hit)

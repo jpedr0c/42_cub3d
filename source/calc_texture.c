@@ -12,6 +12,9 @@
 
 #include "../include/cub3d.h"
 
+/*Calculates the distance of the perpendicular wall hit by the ray, determines
+the start and end positions to draw the wall on the screen, and adjusts the
+line height of the wall based on its distance*/
 void	calculate_screen_line(t_ray *ray)
 {
 	if (!ray->side)
@@ -27,6 +30,9 @@ void	calculate_screen_line(t_ray *ray)
 		ray->draw_end = HEIGHT - 1;
 }
 
+/*determines which texture ID to use based on the direction the player is
+facing and which side of the wall was hit by the ray, and assigns the
+corresponding texture ID*/
 void	calculate_texture_id(t_ray *ray)
 {
 	if (ray->side == 0)
@@ -45,6 +51,7 @@ void	calculate_texture_id(t_ray *ray)
 	}
 }
 
+/*Calculates the exact location of the wall hit by the ray*/
 void	calculate_wall_coordinate(t_game *game, t_ray *ray)
 {
 	if (ray->side == 0)
@@ -54,6 +61,8 @@ void	calculate_wall_coordinate(t_game *game, t_ray *ray)
 	ray->wall_x -= floor(ray->wall_x);
 }
 
+/*calculates the x-coordinate on a texture used to render a wall, and adjusts
+the value if the ray is facing left or upward*/
 void	calculate_texture_coordinate(t_game *game, t_ray *ray)
 {
 	ray->tex_x = (int)(ray->wall_x * TEX_W);
@@ -64,6 +73,8 @@ void	calculate_texture_coordinate(t_game *game, t_ray *ray)
 	}
 }
 
+/*calculates the texture step and position based on the ray's position and
+line height*/
 void	calculate_texture_data(t_game *game, t_ray *ray)
 {
 	calculate_wall_coordinate(game, ray);
