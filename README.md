@@ -17,7 +17,7 @@ Esc: exit the game
 ## Installation
 Clone the repository
 ```
-git clone https://github.com/jpedr0c/cub3d.git
+git clone https://github.com/jpedr0c/42_cub3d.git
 ```
 Run the make command to compile the game
 
