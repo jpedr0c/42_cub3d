@@ -26,6 +26,6 @@ make
 ```
 Run the game
 ```
-./cub3D .maps/mine.cub
+./cub3D ./maps/mine.cub
 ```
  ![alt text](image/img.png)
