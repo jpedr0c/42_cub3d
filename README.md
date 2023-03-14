@@ -27,7 +27,7 @@
 
 <a id="About"></a>
 ## 💡 About the project
-> This project is a graphic module project of the programming school 42, where students are challenged to create a 2D game using the MinilibX graphic library. The objective of the game is simple: the player must control a character to collect all the collectibles in a maze and then leave through the exit door.
+> This project is an introductory 3D graphics project that is part of the curriculum at the 42 programming school. It challenges to write a first-person maze game using the raycasting rendering technique. The player can move through the maze using the WASD keys and rotate the view using the right and left arrow keys. This project was developed using the C programming language and the minilibx (for 3D rendering) graphics libraries.
 
 <br/>
 
