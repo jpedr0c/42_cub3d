@@ -77,7 +77,7 @@ Below are screenshots of the three maps included with the Cub3D project. These m
 
  ⭐ mine.cub | ⭐ tech.cub |
 |---|---|
-![Map mine](image/img.png) | ![Map 2](image/tech.png)
+![Map mine](image/img.png) | ![Map tech](image/tech.png)
  
 - To run the game with a specific map, simply replace "maps/mine.cub" in the command to run the game with the name of the desired map file (e.g., "maps/tech.cub").
 
