@@ -13,7 +13,7 @@
 </p>
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#table-of-contents)
 
 <p align="center">
   <a href="#About"> 💡 About the project </a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -85,12 +85,12 @@ Below are screenshots of the three maps included with the Cub3D project. These m
  
  <a id="Credits"></a>
 ## 🏆 Credits
-<h3 align="center">Thank you for taking the time to review our project!</h3>
-
-<div align="center">
-
-| [<img src="https://avatars.githubusercontent.com/u/78514252?v=4" width="120"><br><p align="center"> João Pedro </p>](https://github.com/jpedr0c) | <p align="justify">***If you have any questions or would like to connect with me, please feel free to reach out to me on [LinkedIn](https://www.linkedin.com/in/jpedroc)***</p> |
+<h3 align="center">Thank you for taking the time to review our project!!!</h3>
+    
+<h4>The members of our team include:</h4>   
+<div>
+  
+| [<img src="https://avatars.githubusercontent.com/u/78514252?v=4" width="120"><br><p align="center"> João Pedro </p>](https://github.com/jpedr0c)[<img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/github-dark.svg" width="25" height="25" />](https://www.github.com/jpedr0c) [<img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/linkedin.svg" width="25" height="25" />](https://www.linkedin.com/in/jpedroc) | [<img src="https://avatars.githubusercontent.com/u/57332018?v=4" width="120"><br><p align="center"> Raoni Silva </p>](https://github.com/raonieqr)[<img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/github-dark.svg" width="25" height="25" />](https://www.github.com/raonieqr) [<img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/socials/linkedin.svg" width="25" height="25" />](https://www.linkedin.com/in/raonieqr/) |
 |---|---|
-| [<img src="https://avatars.githubusercontent.com/u/57332018?v=4" width="120"><br><p align="center"> Raoni Silva </p>](https://github.com/raonieqr) | <p align="justify">***If you have any questions or would like to connect with me, please feel free to reach out to me on [LinkedIn](https://www.linkedin.com/in/raonieqr/)***</p> |
-
+  
 </div>
